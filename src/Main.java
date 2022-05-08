@@ -9,7 +9,4 @@ public class Main {
             mainFrame.setVisible(true);//必须是true才能显示棋盘
         });
     }
-}//test2
-
-
-//test
+}//test3
