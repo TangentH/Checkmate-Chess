@@ -9,6 +9,7 @@ import model.KingChessComponent;
 import model.RookChessComponent;
 import view.Chessboard;
 
+//test
 public class ClickController {
     private final Chessboard chessboard;
     private ChessComponent first;
