@@ -1,5 +1,5 @@
 package model;
-//test1
+
 import view.ChessboardPoint;
 import controller.ClickController;
 

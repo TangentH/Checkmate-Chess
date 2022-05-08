@@ -46,7 +46,7 @@ public class ClickController {
                     first = null;//成功行棋后，自动将clickController的选定设为null
                 } else {
                     chessboard.castle((KingChessComponent) first, (RookChessComponent) chessComponent);
-                    chessboard.swapColor();
+                    chessboard.swapColor();//更换行棋方
                     first.setSelected(false);
                     first = null;//成功行棋后，自动将clickController的选定设为null
                 }
@@ -112,7 +112,7 @@ public class ClickController {
     }
 
     //FIXME:以下方法用于检查王车易位条件2和3，这个判断暂未加入到代码中
-    public boolean castleWithoutCheckmate() {
+    public boolean WithoutCheckmate() {
         return true;
     }
 }
