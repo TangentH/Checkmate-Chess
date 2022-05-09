@@ -14,6 +14,7 @@ public class ChessGameFrame extends JFrame {
     private final int HEIGTH;
     public final int CHESSBOARD_SIZE;
     private GameController gameController;//TODO:这个对象是用于导入外部文件的
+    private Chessboard chessboard;
 
     //constructor
     public ChessGameFrame(int width, int height) {
@@ -33,6 +34,7 @@ public class ChessGameFrame extends JFrame {
         addLabel();
         addHelloButton();
         addLoadButton();
+        addRestartButton();
     }
 
 
@@ -40,7 +42,7 @@ public class ChessGameFrame extends JFrame {
      * 在游戏面板中添加棋盘
      */
     private void addChessboard() {
-        Chessboard chessboard = new Chessboard(CHESSBOARD_SIZE, CHESSBOARD_SIZE);       //TODO
+        chessboard = new Chessboard(CHESSBOARD_SIZE, CHESSBOARD_SIZE);       //TODO
         gameController = new GameController(chessboard);                    //TODO:chessboard基本集成了最重要的功能
         chessboard.setLocation(HEIGTH / 10, HEIGTH / 10);
         add(chessboard);//这句话一定要加，相当于把棋盘挂载到窗口上
@@ -86,6 +88,21 @@ public class ChessGameFrame extends JFrame {
             System.out.println("Click load");
             String path = JOptionPane.showInputDialog(this,"Input Path here");
             gameController.loadGameFromFile(path);
+        });
+    }
+
+    private void addRestartButton() {
+        JButton button = new JButton("Restart");
+        button.setLocation(HEIGTH, HEIGTH / 10 + 360);
+        button.setSize(200, 60);
+        button.setFont(new Font("Rockwell", Font.BOLD, 20));
+        add(button);
+
+        button.addActionListener(e -> { //TODO：了解actionListener如何使用
+            System.out.println("Click Restart");
+            remove(chessboard);
+            addChessboard();
+            this.repaint();
         });
     }
 
