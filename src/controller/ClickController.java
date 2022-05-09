@@ -56,6 +56,13 @@ public class ClickController {
                 chessboard.swapColor();
                 first.setSelected(false);
                 first = null;//成功行棋后，自动将clickController的选定设为null
+            }else if(chessComponent.getChessColor()==first.getChessColor()){
+                first.setSelected(false);
+                chessComponent.setSelected(true);
+                ChessComponent recordFirst = first;
+                first = chessComponent;
+                first.repaint();
+                recordFirst.repaint();
             }
         }
     }
