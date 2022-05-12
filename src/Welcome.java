@@ -11,6 +11,7 @@ public class Welcome extends JFrame {
     private JButton PlayButton;
     private JButton SettingsButton;
     private JButton AboutUsButton;
+    private JLabel Bg;
     private int WIDTH;
     private int HEIGHT;
 
@@ -30,6 +31,9 @@ public class Welcome extends JFrame {
         AboutUsButton.setSize(200,50);
         AboutUsButton.setFont(new Font("Rockwell", Font.BOLD, 20));
         AboutUsButton.setLocation(WIDTH/2-100,HEIGHT/2+90);
+        Bg.setSize(550,760);
+        ImageIcon picture = new ImageIcon("resource\\Background.jpg");  //load a picture from computer
+        Bg.setIcon(picture);
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null); // Center the window.
         setIconImages(null);//这个应该可以用来改变窗体icon
