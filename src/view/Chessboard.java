@@ -31,9 +31,11 @@ public class Chessboard extends JComponent {
     //all chessComponents in this chessboard are shared only one model controller
     private final ClickController clickController = new ClickController(this);  //TODO
     private final int CHESS_SIZE;
+    private JLabel colorLabel;
 
 
-    public Chessboard(int width, int height) {
+    public Chessboard(int width, int height, JLabel colorLabel) {
+        this.colorLabel = colorLabel;
         setLayout(null); // Use absolute layout.    //TODO：layout的作用
         setSize(width, height);//棋盘的大小
         CHESS_SIZE = width / 8;//每个棋盘格的大小   //TODO：改变窗体大小需要连带改动棋盘格大小
@@ -147,6 +149,11 @@ public class Chessboard extends JComponent {
     //更换行棋方的方法
     public void swapColor() {
         currentColor = currentColor == ChessColor.BLACK ? ChessColor.WHITE : ChessColor.BLACK;
+        if(currentColor==ChessColor.WHITE){
+            colorLabel.setText("WHITE");
+        }else{
+            colorLabel.setText("BLACK");
+        }
     }
 
     private void initRookOnBoard(int row, int col, ChessColor color) {

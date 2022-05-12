@@ -15,8 +15,8 @@ public class ChessGameFrame extends JFrame {
     public final int CHESSBOARD_SIZE;
     private GameController gameController;//TODO:这个对象是用于导入外部文件的
     private Chessboard chessboard;
+    private JLabel colorLabel;
 
-    //constructor
     public ChessGameFrame(int width, int height) {
         this.setResizable(false);
         setTitle("Checkmate"); //设置标题
@@ -31,11 +31,12 @@ public class ChessGameFrame extends JFrame {
         setLayout(null);
 
 //以下是需要显示的窗体组件
-        addChessboard();
         addLabel();
+        addChessboard();
         addHelloButton();
         addLoadButton();
         addRestartButton();
+        addBackButton();
     }
 
 
@@ -43,7 +44,7 @@ public class ChessGameFrame extends JFrame {
      * 在游戏面板中添加棋盘
      */
     private void addChessboard() {
-        chessboard = new Chessboard(CHESSBOARD_SIZE, CHESSBOARD_SIZE);       //TODO
+        chessboard = new Chessboard(CHESSBOARD_SIZE, CHESSBOARD_SIZE,colorLabel);       //TODO
         gameController = new GameController(chessboard);                    //TODO:chessboard基本集成了最重要的功能
         chessboard.setLocation(HEIGTH / 10, HEIGTH / 10);
         add(chessboard);//这句话一定要加，相当于把棋盘挂载到窗口上
@@ -53,11 +54,16 @@ public class ChessGameFrame extends JFrame {
      * 在游戏面板中添加标签
      */
     private void addLabel() {
-        JLabel statusLabel = new JLabel("Hello world");
-        statusLabel.setLocation(HEIGTH, HEIGTH / 10);//通过窗体的高度计算出来的位置
-        statusLabel.setSize(200, 60);//文本框的大小
+        JLabel statusLabel = new JLabel("Current Player");
+        colorLabel = new JLabel("WHITE");
+        statusLabel.setLocation(HEIGTH-30, 70);//通过窗体的高度计算出来的位置
+        statusLabel.setSize(500, 80);//文本框的大小
         statusLabel.setFont(new Font("Rockwell", Font.BOLD, 30));//宋体楷体都能用
+        colorLabel.setLocation(HEIGTH+25, 100);//通过窗体的高度计算出来的位置
+        colorLabel.setSize(500, 80);//文本框的大小
+        colorLabel.setFont(new Font("Rockwell", Font.BOLD, 30));//宋体楷体都能用
         add(statusLabel);//把label添加到调用对象中
+        add(colorLabel);
     }
 
     /**
@@ -66,7 +72,7 @@ public class ChessGameFrame extends JFrame {
 
     private void addHelloButton() {
         JButton button = new JButton("Show Hello Here");
-        button.addActionListener((e) ->{
+        button.addActionListener((e) -> {
             System.out.println("Button clicked");
             JOptionPane.showMessageDialog(this, "Hello, world!");
             System.out.println("Hello");
@@ -87,7 +93,7 @@ public class ChessGameFrame extends JFrame {
 
         button.addActionListener(e -> { //TODO：了解actionListener如何使用
             System.out.println("Click load");
-            String path = JOptionPane.showInputDialog(this,"Input Path here");
+            String path = JOptionPane.showInputDialog(this, "Input Path here");
             gameController.loadGameFromFile(path);
         });
     }
@@ -104,6 +110,20 @@ public class ChessGameFrame extends JFrame {
             remove(chessboard);
             addChessboard();
             this.repaint();
+            colorLabel.setText("WHITE");
+        });
+    }
+
+    private void addBackButton() {
+        JButton button = new JButton("Back");
+        button.setLocation(HEIGTH, HEIGTH / 10 + 480);
+        button.setSize(200, 60);
+        button.setFont(new Font("Rockwell", Font.BOLD, 20));
+        add(button);
+
+        button.addActionListener(e -> {
+            this.setVisible(false);
+
         });
     }
 
