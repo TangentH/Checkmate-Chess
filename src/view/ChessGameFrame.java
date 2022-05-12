@@ -18,6 +18,7 @@ public class ChessGameFrame extends JFrame {
 
     //constructor
     public ChessGameFrame(int width, int height) {
+        this.setResizable(false);
         setTitle("Checkmate"); //设置标题
         this.WIDTH = width;
         this.HEIGTH = height;

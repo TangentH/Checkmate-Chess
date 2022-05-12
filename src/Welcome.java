@@ -19,6 +19,7 @@ public class Welcome extends JFrame {
         this.WIDTH = width;
         this.HEIGHT = height;
         setContentPane(WelcomePanel);
+        this.setResizable(false);//静止调整窗体大小
         this.pack();
         SettingsButton.setSize(200,50);
         SettingsButton.setFont(new Font("Rockwell", Font.BOLD, 20));
