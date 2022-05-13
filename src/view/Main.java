@@ -1,4 +1,6 @@
-import view.ChessGameFrame;
+package view;
+
+import view.Welcome;
 
 import javax.swing.*;
 

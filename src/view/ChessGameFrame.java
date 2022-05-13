@@ -44,7 +44,7 @@ public class ChessGameFrame extends JFrame {
      * 在游戏面板中添加棋盘
      */
     private void addChessboard() {
-        chessboard = new Chessboard(CHESSBOARD_SIZE, CHESSBOARD_SIZE,colorLabel);       //TODO
+        chessboard = new Chessboard(CHESSBOARD_SIZE, CHESSBOARD_SIZE, colorLabel);       //TODO
         gameController = new GameController(chessboard);                    //TODO:chessboard基本集成了最重要的功能
         chessboard.setLocation(HEIGTH / 10, HEIGTH / 10);
         add(chessboard);//这句话一定要加，相当于把棋盘挂载到窗口上
@@ -56,10 +56,10 @@ public class ChessGameFrame extends JFrame {
     private void addLabel() {
         JLabel statusLabel = new JLabel("Current Player");
         colorLabel = new JLabel("WHITE");
-        statusLabel.setLocation(HEIGTH-30, 70);//通过窗体的高度计算出来的位置
+        statusLabel.setLocation(HEIGTH - 30, 70);//通过窗体的高度计算出来的位置
         statusLabel.setSize(500, 80);//文本框的大小
         statusLabel.setFont(new Font("Rockwell", Font.BOLD, 30));//宋体楷体都能用
-        colorLabel.setLocation(HEIGTH+25, 100);//通过窗体的高度计算出来的位置
+        colorLabel.setLocation(HEIGTH + 25, 100);//通过窗体的高度计算出来的位置
         colorLabel.setSize(500, 80);//文本框的大小
         colorLabel.setFont(new Font("Rockwell", Font.BOLD, 30));//宋体楷体都能用
         add(statusLabel);//把label添加到调用对象中
@@ -111,6 +111,7 @@ public class ChessGameFrame extends JFrame {
             addChessboard();
             this.repaint();
             colorLabel.setText("WHITE");
+            JOptionPane.showMessageDialog(this, "Restart Successfully!");
         });
     }
 
@@ -123,7 +124,7 @@ public class ChessGameFrame extends JFrame {
 
         button.addActionListener(e -> {
             this.setVisible(false);
-
+            Main.welcomeFrame.setVisible(true);
         });
     }
 

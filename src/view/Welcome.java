@@ -1,5 +1,6 @@
-import view.ChessGameFrame;
+package view;
 
+import view.ChessGameFrame;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
