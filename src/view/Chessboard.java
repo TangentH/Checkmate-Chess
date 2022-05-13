@@ -120,7 +120,13 @@ public class Chessboard extends JComponent {
     public void castle(KingChessComponent king, RookChessComponent rook) {
         if (rook.getChessboardPoint().getY() == 0) {//长易位，对于黑白子皆可用
             king.swapLocation(chessComponents[king.getChessboardPoint().getX()][2]);
+            ChessComponent empty1 = chessComponents[king.getChessboardPoint().getX()][2];
+            chessComponents[king.getChessboardPoint().getX()][2] = king;//需要在二维数组中也调换王车易位中变换过的棋子
+            chessComponents[king.getChessboardPoint().getX()][4] = empty1;
             rook.swapLocation(chessComponents[king.getChessboardPoint().getX()][3]);
+            ChessComponent empty2 = chessComponents[king.getChessboardPoint().getX()][3];
+            chessComponents[king.getChessboardPoint().getX()][3] = rook;
+            chessComponents[king.getChessboardPoint().getX()][0] = empty2;
             king.repaint();
             rook.repaint();
             chessComponents[king.getChessboardPoint().getX()][0].repaint();
@@ -128,7 +134,13 @@ public class Chessboard extends JComponent {
             king.setKingCanCastle(false);
         } else {
             king.swapLocation(chessComponents[king.getChessboardPoint().getX()][6]);
+            ChessComponent empty1 = chessComponents[king.getChessboardPoint().getX()][6];
+            chessComponents[king.getChessboardPoint().getX()][6] = king;
+            chessComponents[king.getChessboardPoint().getX()][4] = empty1;
             rook.swapLocation(chessComponents[king.getChessboardPoint().getX()][5]);
+            ChessComponent empty2 = chessComponents[king.getChessboardPoint().getX()][5];
+            chessComponents[king.getChessboardPoint().getX()][5] = rook;
+            chessComponents[king.getChessboardPoint().getX()][7] = empty2;
             king.repaint();
             rook.repaint();
             chessComponents[king.getChessboardPoint().getX()][7].repaint();
@@ -149,9 +161,9 @@ public class Chessboard extends JComponent {
     //更换行棋方的方法
     public void swapColor() {
         currentColor = currentColor == ChessColor.BLACK ? ChessColor.WHITE : ChessColor.BLACK;
-        if(currentColor==ChessColor.WHITE){
+        if (currentColor == ChessColor.WHITE) {
             colorLabel.setText("WHITE");
-        }else{
+        } else {
             colorLabel.setText("BLACK");
         }
     }
