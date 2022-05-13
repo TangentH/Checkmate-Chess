@@ -80,12 +80,12 @@ public class PawnChessComponent extends ChessComponent {
 
         int col = source.getY();
 
-        if (pawnImage == PAWN_WHITE) {//白兵在起始行上，可以往前走1或2格
+        if (chessColor == ChessColor.WHITE) {//白兵在起始行上，可以往前走1或2格
             if (source.getY() == destination.getY() && !(chessComponents[source.getX() - 1][col] instanceof EmptySlotComponent)) {//兵不能吃前方的棋子
                 return false;
             } else {
                 if (source.getX() == 6) {
-                    if (source.getY() == destination.getY() && (destination.getX() == 4 || destination.getX() == 5)) {
+                    if (source.getY() == destination.getY() && (destination.getX() == 4 || destination.getX() == 5) && chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent) {
                         for (int i = Math.min(source.getX(), destination.getX()) + 1;
                              i < Math.max(source.getX(), destination.getX()); i++) {
                             if (!(chessComponents[i][col] instanceof EmptySlotComponent)) {
@@ -116,12 +116,12 @@ public class PawnChessComponent extends ChessComponent {
             }
         }
 
-        if (pawnImage == PAWN_BLACK) {//黑兵在起始行上，可以往前走1或2格
+        if (chessColor == ChessColor.BLACK) {//黑兵在起始行上，可以往前走1或2格
             if (source.getY() == destination.getY() && !(chessComponents[source.getX() + 1][col] instanceof EmptySlotComponent)) {//兵不能吃前方的棋子
                 return false;
             } else {
                 if (source.getX() == 1) {
-                    if (source.getY() == destination.getY() && (destination.getX() == 2 || destination.getX() == 3)) {
+                    if (source.getY() == destination.getY() && (destination.getX() == 2 || destination.getX() == 3) && chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent) {
                         for (int i = Math.min(source.getX(), destination.getX()) + 1;
                              i < Math.max(source.getX(), destination.getX()); i++) {
                             if (!(chessComponents[i][col] instanceof EmptySlotComponent)) {
