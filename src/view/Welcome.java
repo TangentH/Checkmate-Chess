@@ -1,6 +1,7 @@
 package view;
 
 import view.ChessGameFrame;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -46,6 +47,7 @@ public class Welcome extends JFrame {
                 System.out.println("Play button clicked");
                 ChessGameFrame chessGameFrame = new ChessGameFrame(1050, 820);
                 chessGameFrame.setVisible(true);
+                chessGameFrame.setIconImage(new ImageIcon("./images/Icon.png").getImage());
                 Main.welcomeFrame.setVisible((false));
             }
         });
