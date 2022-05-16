@@ -114,6 +114,13 @@ public class ChessGameFrame extends JFrame {
             addChessboard();
             this.repaint();
             colorLabel.setText("WHITE");
+            //如果在升变过程中遇到了restart，要将升变按钮删除
+            if (wRook != null) {
+                removeWhitePromotionButtons();
+            }
+            if (bRook != null) {
+                removeBlackPromotionButtons();
+            }
             JOptionPane.showMessageDialog(this, "Restart Successfully!");
         });
     }
@@ -130,7 +137,8 @@ public class ChessGameFrame extends JFrame {
             Main.welcomeFrame.setVisible(true);
         });
     }
-//TODO：添加白兵升变时候显示的按钮
+
+    //TODO：添加白兵升变时候显示的按钮
     public void addWhitePromotionButtons() {
         wRook = new JButton();
         wQueen = new JButton();
@@ -217,7 +225,8 @@ public class ChessGameFrame extends JFrame {
         });
         add(wBishop);
     }
-//TODO：添加黑兵升变时显示的按钮
+
+    //TODO：添加黑兵升变时显示的按钮
     public void addBlackPromotionButtons() {
         bRook = new JButton();
         bQueen = new JButton();
