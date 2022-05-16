@@ -18,6 +18,14 @@ public class KnightChessComponent extends ChessComponent {
     private static Image KNIGHT_BLACK;
     private Image knightImage;
 
+    public static Image getKnightWhite() {
+        return KNIGHT_WHITE;
+    }
+
+    public static Image getKnightBlack() {
+        return KNIGHT_BLACK;
+    }
+
     /**
      * 读取加载棋子的图片
      *

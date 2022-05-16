@@ -32,7 +32,15 @@ public class Chessboard extends JComponent {
     private final ClickController clickController = new ClickController(this);  //TODO
     private final int CHESS_SIZE;
     private JLabel colorLabel;//用于显示当前行棋方的label
+    public static ChessGameFrame chessGameFrame;
 
+    public ClickController getClickController() {//为了在ChessGameFrame中也能够新建棋子（新建兵底线升变后的棋子），设置该setter，这是新建棋子所需的参数
+        return clickController;
+    }
+
+    public int getCHESS_SIZE() {//与上一个方法相同的原因，新建棋子所需的参数
+        return CHESS_SIZE;
+    }
 
     public Chessboard(int width, int height, JLabel colorLabel) {
         this.colorLabel = colorLabel;
@@ -76,6 +84,7 @@ public class Chessboard extends JComponent {
         initPawnOnBoard(6, 5, ChessColor.WHITE);
         initPawnOnBoard(6, 6, ChessColor.WHITE);
         initPawnOnBoard(6, 7, ChessColor.WHITE);
+        ChessComponent.chessComponents = this.getChessComponents();//给chessComponents传一个静态参数（棋盘）方便swapLocation时检查棋盘看是否升变
     }
 
     public ChessComponent[][] getChessComponents() {
@@ -115,6 +124,20 @@ public class Chessboard extends JComponent {
 //swapLocation仅仅只是在chessComponent的字段上更改了两个棋子的位置，但是在棋盘(chessComponent中，两者位置还没有调换和repaint)
         chess1.repaint();
         chess2.repaint();
+        //TODO：兵底线升变，当有吃子的时候
+        for (int wPawnLocation = 0; wPawnLocation < 8; wPawnLocation++) {
+            if (chessComponents[0][wPawnLocation] instanceof PawnChessComponent) {//白子兵底线检查
+                chessGameFrame.addWhitePromotionButtons();
+                chessGameFrame.repaint();
+            }
+        }
+        for (int bPawnLocation = 0; bPawnLocation < 8; bPawnLocation++) {
+            if(chessComponents[7][bPawnLocation] instanceof PawnChessComponent){//黑子兵底线检查
+                chessGameFrame.addBlackPromotionButtons();
+                chessGameFrame.repaint();
+            }
+        }
+
     }
 
     public void castle(KingChessComponent king, RookChessComponent rook) {

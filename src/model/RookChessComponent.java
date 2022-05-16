@@ -26,6 +26,14 @@ public class RookChessComponent extends ChessComponent {
     private Image rookImage;
     private boolean rookCanCastle = true;//用于检查rook是否移动过，从而判断能否castle
 
+    public static Image getRookWhite() {//用于获取pawn升变时生成按钮的图像
+        return ROOK_WHITE;
+    }
+
+    public static Image getRookBlack() {//用于获取pawn升变时生成按钮的图像
+        return ROOK_BLACK;
+    }
+
     /**
      * 读取加载车棋子的图片
      *

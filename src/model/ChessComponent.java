@@ -1,5 +1,7 @@
 package model;
 
+import view.ChessGameFrame;
+import view.Chessboard;
 import view.ChessboardPoint;
 import controller.ClickController;
 
@@ -38,6 +40,9 @@ public abstract class ChessComponent extends JComponent {
     private ChessboardPoint chessboardPoint;//用于记录某个chessComponent所在的位置
     protected final ChessColor chessColor;
     private boolean selected;
+    //以下两个字段是为了方便swapLocation方法中，进行升变按钮的显示
+    public static ChessGameFrame chessGameFrame;
+    public static ChessComponent[][] chessComponents;
 
     protected ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size) {
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);    //TODO:这段代码的意思
@@ -82,6 +87,19 @@ public abstract class ChessComponent extends JComponent {
         setLocation(point2);
         another.setChessboardPoint(chessboardPoint1);
         another.setLocation(point1);
+        //TODO：兵底线升变，当只没有吃子的时候
+        for (int wPawnLocation = 0; wPawnLocation < 8; wPawnLocation++) {
+            if (chessComponents[0][wPawnLocation] instanceof PawnChessComponent) {//白子兵底线检查
+                chessGameFrame.addWhitePromotionButtons();
+                chessGameFrame.repaint();
+            }
+        }
+        for (int bPawnLocation = 0; bPawnLocation < 8; bPawnLocation++) {
+            if (chessComponents[7][bPawnLocation] instanceof PawnChessComponent) {//黑子兵底线检查
+                chessGameFrame.addBlackPromotionButtons();
+                chessGameFrame.repaint();
+            }
+        }
     }
 
     /**
@@ -93,7 +111,8 @@ public abstract class ChessComponent extends JComponent {
     protected void processMouseEvent(MouseEvent e) {
         super.processMouseEvent(e);
 
-        if (e.getID() == MouseEvent.MOUSE_PRESSED) {
+        if (e.getID() == MouseEvent.MOUSE_PRESSED && chessGameFrame.wRook == null && chessGameFrame.bRook == null) {
+            //TODO:只有不存在升变按钮时，才可以正常下棋，只检查双方的其中一个升变按钮
             System.out.printf("Click [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
             clickController.onClick(this);//把自己传入clickController
         }

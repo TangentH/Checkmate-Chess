@@ -18,6 +18,14 @@ public class QueenChessComponent extends ChessComponent {
     private static Image QUEEN_BLACK;
     private Image queenImage;
 
+    public static Image getQueenWhite() {
+        return QUEEN_WHITE;
+    }
+
+    public static Image getQueenBlack() {
+        return QUEEN_BLACK;
+    }
+
     /**
      * 读取加载棋子的图片
      *

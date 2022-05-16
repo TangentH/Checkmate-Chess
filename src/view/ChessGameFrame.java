@@ -1,6 +1,7 @@
 package view;
 
 import controller.GameController;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +17,7 @@ public class ChessGameFrame extends JFrame {
     private GameController gameController;//TODO:这个对象是用于导入外部文件的
     private Chessboard chessboard;
     private JLabel colorLabel;
+    public JButton wRook, wQueen, wBishop, wKnight, bRook, bQueen, bBishop, bKnight;//用于兵底线升变的按钮
 
     public ChessGameFrame(int width, int height) {
         this.setResizable(false);
@@ -29,7 +31,8 @@ public class ChessGameFrame extends JFrame {
         setIconImages(null);//这个应该可以用来改变窗体icon
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //设置程序关闭按键，如果点击右上方的叉就游戏全部关闭了
         setLayout(null);
-
+        Chessboard.chessGameFrame = this;//给chessboard做一个备份，方便后续添加升变按钮时找到对应的chessGameFrame(在swapChessComponent中要用到)
+        ChessComponent.chessGameFrame = this;//同理，给chessComponent做一个备份，因为swapLocation方法体在ChessComponent中
 //以下是需要显示的窗体组件
         addLabel();
         addChessboard();
@@ -37,7 +40,6 @@ public class ChessGameFrame extends JFrame {
         addLoadButton();
         addRestartButton();
         addBackButton();
-//        addWhitePromotionButtons();
     }
 
 
@@ -128,12 +130,202 @@ public class ChessGameFrame extends JFrame {
             Main.welcomeFrame.setVisible(true);
         });
     }
-
-    public void addWhitePromotionButtons(){
-        JButton wRook = new JButton("Rook");
-        wRook.setSize(76,76);
-        wRook.setLocation(82*2,5+82*8);
+//TODO：添加白兵升变时候显示的按钮
+    public void addWhitePromotionButtons() {
+        wRook = new JButton();
+        wQueen = new JButton();
+        wKnight = new JButton();
+        wBishop = new JButton();
+        wRook.setSize(76, 76);
+        wRook.setLocation(82, 5);
+        wRook.setBackground(Color.orange);
+        wRook.setIcon(new ImageIcon(RookChessComponent.getRookWhite().getScaledInstance(wRook.getWidth(), wRook.getHeight(), Image.SCALE_AREA_AVERAGING)));
+        //获取具体ChessComponent的图像，并在缩放后设置为icon
+        wRook.addActionListener(e -> {
+            System.out.println("Click wRook");
+            for (int i = 0; i < 8; i++) {
+                ChessComponent[][] chessComponents = chessboard.getChessComponents();
+                if (chessComponents[0][i] instanceof PawnChessComponent) {
+                    PawnChessComponent pawn = (PawnChessComponent) chessComponents[0][i];
+                    chessboard.remove(pawn);
+                    chessComponents[0][i] = new RookChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessboard.putChessOnBoard(chessComponents[0][i]);
+                    removeWhitePromotionButtons();
+                    this.repaint();
+                }
+            }
+        });
         add(wRook);
+        wQueen.setSize(76, 76);
+        wQueen.setLocation(82 + 76 * 2, 5);
+        wQueen.setBackground(Color.orange);
+        wQueen.setIcon(new ImageIcon(QueenChessComponent.getQueenWhite().getScaledInstance(wQueen.getWidth(), wQueen.getHeight(), Image.SCALE_AREA_AVERAGING)));
+        //获取具体ChessComponent的图像，并在缩放后设置为icon
+        wQueen.addActionListener(e -> {
+            System.out.println("Click wQueen");
+            for (int i = 0; i < 8; i++) {
+                ChessComponent[][] chessComponents = chessboard.getChessComponents();
+                if (chessComponents[0][i] instanceof PawnChessComponent) {
+                    PawnChessComponent pawn = (PawnChessComponent) chessComponents[0][i];
+                    chessboard.remove(pawn);
+                    chessComponents[0][i] = new QueenChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessboard.putChessOnBoard(chessComponents[0][i]);
+                    removeWhitePromotionButtons();
+                    this.repaint();
+                }
+            }
+        });
+        add(wQueen);
+        wKnight.setSize(76, 76);
+        wKnight.setLocation(82 + 76 * 4, 5);
+        wKnight.setBackground(Color.orange);
+        wKnight.setIcon(new ImageIcon(KnightChessComponent.getKnightWhite().getScaledInstance(wKnight.getWidth(), wKnight.getHeight(), Image.SCALE_AREA_AVERAGING)));
+        //获取具体ChessComponent的图像，并在缩放后设置为icon
+        wKnight.addActionListener(e -> {
+            System.out.println("Click wKnight");
+            for (int i = 0; i < 8; i++) {
+                ChessComponent[][] chessComponents = chessboard.getChessComponents();
+                if (chessComponents[0][i] instanceof PawnChessComponent) {
+                    PawnChessComponent pawn = (PawnChessComponent) chessComponents[0][i];
+                    chessboard.remove(pawn);
+                    chessComponents[0][i] = new KnightChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessboard.putChessOnBoard(chessComponents[0][i]);
+                    removeWhitePromotionButtons();
+                    this.repaint();
+                }
+            }
+        });
+        add(wKnight);
+        wBishop.setSize(76, 76);
+        wBishop.setLocation(82 + 76 * 6, 5);
+        wBishop.setBackground(Color.orange);
+        wBishop.setIcon(new ImageIcon(BishopChessComponent.getBishopWhite().getScaledInstance(wBishop.getWidth(), wBishop.getHeight(), Image.SCALE_AREA_AVERAGING)));
+        //获取具体ChessComponent的图像，并在缩放后设置为icon
+        wBishop.addActionListener(e -> {
+            System.out.println("Click wBishop");
+            for (int i = 0; i < 8; i++) {
+                ChessComponent[][] chessComponents = chessboard.getChessComponents();
+                if (chessComponents[0][i] instanceof PawnChessComponent) {
+                    PawnChessComponent pawn = (PawnChessComponent) chessComponents[0][i];
+                    chessboard.remove(pawn);
+                    chessComponents[0][i] = new BishopChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessboard.putChessOnBoard(chessComponents[0][i]);
+                    removeWhitePromotionButtons();
+                    this.repaint();
+                }
+            }
+        });
+        add(wBishop);
+    }
+//TODO：添加黑兵升变时显示的按钮
+    public void addBlackPromotionButtons() {
+        bRook = new JButton();
+        bQueen = new JButton();
+        bKnight = new JButton();
+        bBishop = new JButton();
+        bRook.setSize(76, 76);
+        bRook.setLocation(82, 5 + 76 * 9 + 3);
+        bRook.setBackground(Color.orange);
+        bRook.setIcon(new ImageIcon(RookChessComponent.getRookBlack().getScaledInstance(bRook.getWidth(), bRook.getHeight(), Image.SCALE_AREA_AVERAGING)));
+        //获取具体ChessComponent的图像，并在缩放后设置为icon
+        bRook.addActionListener(e -> {
+            System.out.println("Click bRook");
+            for (int i = 0; i < 8; i++) {
+                ChessComponent[][] chessComponents = chessboard.getChessComponents();
+                if (chessComponents[7][i] instanceof PawnChessComponent) {
+                    PawnChessComponent pawn = (PawnChessComponent) chessComponents[7][i];
+                    chessboard.remove(pawn);
+                    chessComponents[7][i] = new RookChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessboard.putChessOnBoard(chessComponents[7][i]);
+                    removeBlackPromotionButtons();
+                    this.repaint();
+                }
+            }
+        });
+        add(bRook);
+        bQueen.setSize(76, 76);
+        bQueen.setLocation(82 + 76 * 2, 5 + 76 * 9 + 3);
+        bQueen.setBackground(Color.orange);
+        bQueen.setIcon(new ImageIcon(QueenChessComponent.getQueenBlack().getScaledInstance(bQueen.getWidth(), bQueen.getHeight(), Image.SCALE_AREA_AVERAGING)));
+        //获取具体ChessComponent的图像，并在缩放后设置为icon
+        bQueen.addActionListener(e -> {
+            System.out.println("Click bQueen");
+            for (int i = 0; i < 8; i++) {
+                ChessComponent[][] chessComponents = chessboard.getChessComponents();
+                if (chessComponents[7][i] instanceof PawnChessComponent) {
+                    PawnChessComponent pawn = (PawnChessComponent) chessComponents[7][i];
+                    chessboard.remove(pawn);
+                    chessComponents[7][i] = new QueenChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessboard.putChessOnBoard(chessComponents[7][i]);
+                    removeBlackPromotionButtons();
+                    this.repaint();
+                }
+            }
+        });
+        add(bQueen);
+        bKnight.setSize(76, 76);
+        bKnight.setLocation(82 + 76 * 4, 5 + 76 * 9 + 3);
+        bKnight.setBackground(Color.orange);
+        bKnight.setIcon(new ImageIcon(KnightChessComponent.getKnightBlack().getScaledInstance(bKnight.getWidth(), bKnight.getHeight(), Image.SCALE_AREA_AVERAGING)));
+        //获取具体ChessComponent的图像，并在缩放后设置为icon
+        bKnight.addActionListener(e -> {
+            System.out.println("Click bKnight");
+            for (int i = 0; i < 8; i++) {
+                ChessComponent[][] chessComponents = chessboard.getChessComponents();
+                if (chessComponents[7][i] instanceof PawnChessComponent) {
+                    PawnChessComponent pawn = (PawnChessComponent) chessComponents[7][i];
+                    chessboard.remove(pawn);
+                    chessComponents[7][i] = new KnightChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessboard.putChessOnBoard(chessComponents[7][i]);
+                    removeBlackPromotionButtons();
+                    this.repaint();
+                }
+            }
+        });
+        add(bKnight);
+        bBishop.setSize(76, 76);
+        bBishop.setLocation(82 + 76 * 6, 5 + 76 * 9 + 3);
+        bBishop.setBackground(Color.orange);
+        bBishop.setIcon(new ImageIcon(BishopChessComponent.getBishopBlack().getScaledInstance(bBishop.getWidth(), bBishop.getHeight(), Image.SCALE_AREA_AVERAGING)));
+        //获取具体ChessComponent的图像，并在缩放后设置为icon
+        bBishop.addActionListener(e -> {
+            System.out.println("Click bBishop");
+            for (int i = 0; i < 8; i++) {
+                ChessComponent[][] chessComponents = chessboard.getChessComponents();
+                if (chessComponents[7][i] instanceof PawnChessComponent) {
+                    PawnChessComponent pawn = (PawnChessComponent) chessComponents[7][i];
+                    chessboard.remove(pawn);
+                    chessComponents[7][i] = new BishopChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessboard.putChessOnBoard(chessComponents[7][i]);
+                    removeBlackPromotionButtons();
+                    this.repaint();
+                }
+            }
+        });
+        add(bBishop);
+    }
+
+    public void removeWhitePromotionButtons() {//清除白子的升变按钮
+        remove(wRook);
+        remove(wQueen);
+        remove(wBishop);
+        remove(wKnight);
+        wRook = null;
+        wQueen = null;
+        wBishop = null;
+        wKnight = null;
+        //TODO:同时要设置成空指针，便于检查此时有没有一方的兵在升变
+    }
+
+    public void removeBlackPromotionButtons() {
+        remove(bRook);
+        remove(bQueen);
+        remove(bBishop);
+        remove(bKnight);
+        bRook = null;
+        bQueen = null;
+        bBishop = null;
+        bKnight = null;
     }
 
 

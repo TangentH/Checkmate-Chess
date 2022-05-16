@@ -18,6 +18,14 @@ public class BishopChessComponent extends ChessComponent {
     private static Image BISHOP_BLACK;
     private Image bishopImage;
 
+    public static Image getBishopWhite() {
+        return BISHOP_WHITE;
+    }
+
+    public static Image getBishopBlack() {
+        return BISHOP_BLACK;
+    }
+
     /**
      * 读取加载棋子的图片
      *
