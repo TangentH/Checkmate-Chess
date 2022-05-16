@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+import static model.ChessComponent.record;
+
 /**
  * 这个类表示面板上的棋盘组件对象
  */
@@ -106,6 +108,11 @@ public class Chessboard extends JComponent {
 
     public void swapChessComponents(ChessComponent chess1, ChessComponent chess2) {
         // Note that chess1 has higher priority, 'destroys' chess2 if exists.
+        if (chess1 instanceof PawnChessComponent){
+            record[0] = new PawnChessComponent(chess1.getChessboardPoint(), chess1.getLocation(), chess1.getChessColor(), clickController, CHESS_SIZE);  //将上一步棋存入record
+            record[1] = new PawnChessComponent(chess2.getChessboardPoint(), chess2.getLocation(), chess2.getChessColor(), clickController, CHESS_SIZE);
+        }
+
         if (chess1 instanceof RookChessComponent && !(chess2 instanceof KingChessComponent)) {//如果先选中rook，再选择一个非king的棋子，则判定该rook已经移动过，不能进行王车易位
             ((RookChessComponent) chess1).setRookCanCastle(false);
         }
@@ -115,6 +122,12 @@ public class Chessboard extends JComponent {
         if (!(chess2 instanceof EmptySlotComponent)) {  //吃子操作
             remove(chess2);     //直接从所有组件中移除
             add(chess2 = new EmptySlotComponent(chess2.getChessboardPoint(), chess2.getLocation(), clickController, CHESS_SIZE));   //chess2指向了空棋子这个对象
+        }
+        if (chess1 instanceof PawnChessComponent && chess1.getChessboardPoint().getY() != chess2.getChessboardPoint().getY() && chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()] instanceof PawnChessComponent && chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()].getChessColor() != chess1.getChessColor()){  //如果是吃过路兵
+            //把被吃的兵移除并更换为空棋子
+            remove(chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()]);
+            add(chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()] = new EmptySlotComponent(chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()].getChessboardPoint(), chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()].getLocation(), clickController, CHESS_SIZE));
+            chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()].repaint();
         }
         chess1.swapLocation(chess2);//如果目标位置是对方棋子，则上面操作将对方棋子先更换为空白棋子，然后swap；如果不满足以上if条件，则可以直接swap
         int row1 = chess1.getChessboardPoint().getX(), col1 = chess1.getChessboardPoint().getY();

@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * 这个类是一个抽象类，主要表示8*8棋盘上每个格子的棋子情况，当前有两个子类继承它，分别是EmptySlotComponent(空棋子)和RookChessComponent(车)。
@@ -40,11 +41,12 @@ public abstract class ChessComponent extends JComponent {
     private ChessboardPoint chessboardPoint;//用于记录某个chessComponent所在的位置
     protected final ChessColor chessColor;
     private boolean selected;
+    public static ChessComponent[] record = new ChessComponent[2];  //对走过的兵进行记录
     //以下两个字段是为了方便swapLocation方法中，进行升变按钮的显示
     public static ChessGameFrame chessGameFrame;
     public static ChessComponent[][] chessComponents;
 
-    protected ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size) {
+    public ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size) {
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);    //TODO:这段代码的意思
         setLocation(location);
         setSize(size, size);

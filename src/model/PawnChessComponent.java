@@ -78,13 +78,14 @@ public class PawnChessComponent extends ChessComponent {
     public boolean canMoveTo(ChessComponent[][] chessComponents, ChessboardPoint destination) {
         ChessboardPoint source = getChessboardPoint();  //用于记录该棋子当前位置
 
+
         int col = source.getY();
 
-        if (chessColor == ChessColor.WHITE) {//白兵在起始行上，可以往前走1或2格
+        if (chessColor == ChessColor.WHITE) {  //白兵
             if (source.getY() == destination.getY() && !(chessComponents[source.getX() - 1][col] instanceof EmptySlotComponent)) {//兵不能吃前方的棋子
                 return false;
             } else {
-                if (source.getX() == 6) {
+                if (source.getX() == 6) { //白兵在起始行上，可以往前走1或2格
                     if (source.getY() == destination.getY() && (destination.getX() == 4 || destination.getX() == 5) && chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent) {
                         for (int i = Math.min(source.getX(), destination.getX()) + 1;
                              i < Math.max(source.getX(), destination.getX()); i++) {
@@ -109,18 +110,30 @@ public class PawnChessComponent extends ChessComponent {
                 if (source.getX() - destination.getX() == 1 && Math.abs(source.getY() - destination.getY()) == 1) {
                     if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)) {
                         return true;
+                    }else {  //判断吃过路兵
+                        if (record[1] != null){
+                            ChessboardPoint lastSource = record[0].getChessboardPoint();  //用于记录上一步棋子的初始位置
+                            ChessboardPoint lastDestination = record[1].getChessboardPoint(); //用于记录上一步棋子的结束位置
+
+                            if (source.getX() == 3 && record[0] instanceof PawnChessComponent && lastSource.getX() == 1 && lastDestination.getX() == 3
+                                    && lastDestination.getY() == destination.getY()) { //判断上一步棋是否为相邻列的黑兵前进两步
+                                return true;
+                            }
+                        }
+//                        if (source.getX() == 3 && chessComponents[source.getX()][destination.getY()] instanceof PawnChessComponent){
+//                            return true;
+//                        }
                     }
-                    //return enPassant吃过路兵；
                 }
                 return false;
             }
         }
 
-        if (chessColor == ChessColor.BLACK) {//黑兵在起始行上，可以往前走1或2格
+        if (chessColor == ChessColor.BLACK) {  //黑兵
             if (source.getY() == destination.getY() && !(chessComponents[source.getX() + 1][col] instanceof EmptySlotComponent)) {//兵不能吃前方的棋子
                 return false;
             } else {
-                if (source.getX() == 1) {
+                if (source.getX() == 1) { //黑兵在起始行上，可以往前走1或2格
                     if (source.getY() == destination.getY() && (destination.getX() == 2 || destination.getX() == 3) && chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent) {
                         for (int i = Math.min(source.getX(), destination.getX()) + 1;
                              i < Math.max(source.getX(), destination.getX()); i++) {
@@ -145,8 +158,20 @@ public class PawnChessComponent extends ChessComponent {
                 if (source.getX() - destination.getX() == -1 && Math.abs(source.getY() - destination.getY()) == 1) {
                     if (!(chessComponents[destination.getX()][destination.getY()] instanceof EmptySlotComponent)) {
                         return true;
+                    }else {  //判断吃过路兵
+                        if(record[1] != null){
+                            ChessboardPoint lastSource = record[0].getChessboardPoint();  //用于记录上一步棋子的初始位置
+                            ChessboardPoint lastDestination = record[1].getChessboardPoint(); //用于记录上一步棋子的结束位置
+
+                            if (source.getX() == 4 && record[0] instanceof PawnChessComponent && lastSource.getX() == 6 && lastDestination.getX() == 4
+                                    && lastDestination.getY() == destination.getY()){
+                                return true;
+                            }
+                        }
+//                        if (source.getX() == 4 && chessComponents[source.getX()][destination.getY()] instanceof PawnChessComponent){
+//                            return true;
+//                        }
                     }
-                    //return enPassant吃过路兵；
                 }
                 return false;
             }
