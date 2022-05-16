@@ -22,7 +22,7 @@ public abstract class ChessComponent extends JComponent {
      */
 
 //    private static final Dimension CHESSGRID_SIZE = new Dimension(1080 / 4 * 3 / 8, 1080 / 4 * 3 / 8);    //TODO:这段代码的意思是？
-    private static final Color[] BACKGROUND_COLORS = {Color.WHITE, Color.BLACK};//应该指的是chessComponent有两种颜色选择
+    private static final Color[] BACKGROUND_COLORS = {new Color(235, 236, 208, 255), new Color(119, 149, 86, 255)};//应该指的是chessComponent有两种颜色选择
     /**
      * handle click event
      */
@@ -116,7 +116,7 @@ public abstract class ChessComponent extends JComponent {
     public abstract void loadResource() throws IOException;
 
     @Override
-    protected void paintComponent(Graphics g) {//TODO
+    protected void paintComponent(Graphics g) {//TODO:此处包含了黑白棋盘格的绘制
         super.paintComponents(g);
         System.out.printf("repaint chess [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
         Color squareColor = BACKGROUND_COLORS[(chessboardPoint.getX() + chessboardPoint.getY()) % 2];

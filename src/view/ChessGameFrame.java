@@ -37,6 +37,7 @@ public class ChessGameFrame extends JFrame {
         addLoadButton();
         addRestartButton();
         addBackButton();
+//        addWhitePromotionButtons();
     }
 
 
@@ -44,7 +45,7 @@ public class ChessGameFrame extends JFrame {
      * 在游戏面板中添加棋盘
      */
     private void addChessboard() {
-        chessboard = new Chessboard(CHESSBOARD_SIZE, CHESSBOARD_SIZE, colorLabel);       //TODO
+        chessboard = new Chessboard(608, 608, colorLabel);       //TODO
         gameController = new GameController(chessboard);                    //TODO:chessboard基本集成了最重要的功能
         chessboard.setLocation(HEIGTH / 10, HEIGTH / 10);
         add(chessboard);//这句话一定要加，相当于把棋盘挂载到窗口上
@@ -127,5 +128,13 @@ public class ChessGameFrame extends JFrame {
             Main.welcomeFrame.setVisible(true);
         });
     }
+
+    public void addWhitePromotionButtons(){
+        JButton wRook = new JButton("Rook");
+        wRook.setSize(76,76);
+        wRook.setLocation(82*2,5+82*8);
+        add(wRook);
+    }
+
 
 }

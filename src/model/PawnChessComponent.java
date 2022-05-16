@@ -33,11 +33,11 @@ public class PawnChessComponent extends ChessComponent {
      */
     public void loadResource() throws IOException {
         if (PAWN_WHITE == null) {
-            PAWN_WHITE = ImageIO.read(new File("./images/pawn-white.png"));
+            PAWN_WHITE = ImageIO.read(new File("./images/Chess.comTheme/pawn-white1.png"));
         }
 
         if (PAWN_BLACK == null) {
-            PAWN_BLACK = ImageIO.read(new File("./images/pawn-black.png"));
+            PAWN_BLACK = ImageIO.read(new File("./images/Chess.comTheme/pawn-black1.png"));
         }
     }
 
@@ -167,8 +167,18 @@ public class PawnChessComponent extends ChessComponent {
         g.drawImage(pawnImage, 0, 0, getWidth(), getHeight(), this);
         g.setColor(Color.BLACK);
         if (isSelected()) { // Highlights the model if selected.
-            g.setColor(Color.RED);
+            g.setColor(Color.LIGHT_GRAY);
             g.drawOval(0, 0, getWidth(), getHeight());
+            g.drawOval(0, 0, getWidth(), getHeight());
+            g.drawOval(1, 1, getWidth()-1, getHeight()-2);
+            g.drawOval(1, 1, getWidth()-2, getHeight()-1);
+            g.drawOval(1, 1, getWidth()-2, getHeight()-2);
+            g.drawOval(2, 2, getWidth()-3, getHeight()-4);
+            g.drawOval(2, 2, getWidth()-4, getHeight()-3);
+            g.drawOval(2, 2, getWidth()-4, getHeight()-4);
+            g.drawOval(3, 3, getWidth()-5, getHeight()-6);
+            g.drawOval(3, 3, getWidth()-6, getHeight()-5);
+            g.drawOval(3, 3, getWidth()-6, getHeight()-6);
         }
     }
 }

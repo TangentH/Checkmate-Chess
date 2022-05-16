@@ -25,11 +25,11 @@ public class KnightChessComponent extends ChessComponent {
      */
     public void loadResource() throws IOException {
         if (KNIGHT_WHITE == null) {
-            KNIGHT_WHITE = ImageIO.read(new File("./images/knight-white.png"));//读取车的贴图信息
+            KNIGHT_WHITE = ImageIO.read(new File("./images/Chess.comTheme/knight-white1.png"));//读取车的贴图信息
         }
 
         if (KNIGHT_BLACK == null) {
-            KNIGHT_BLACK = ImageIO.read(new File("./images/knight-black.png"));
+            KNIGHT_BLACK = ImageIO.read(new File("./images/Chess.comTheme/knight-black1.png"));
         }
     }
 
@@ -92,8 +92,18 @@ public class KnightChessComponent extends ChessComponent {
         g.drawImage(knightImage, 0, 0, getWidth(), getHeight(), this);
         g.setColor(Color.BLACK);
         if (isSelected()) { // Highlights the model if selected.
-            g.setColor(Color.RED);
+            g.setColor(Color.LIGHT_GRAY);
             g.drawOval(0, 0, getWidth(), getHeight());
+            g.drawOval(0, 0, getWidth(), getHeight());
+            g.drawOval(1, 1, getWidth()-1, getHeight()-2);
+            g.drawOval(1, 1, getWidth()-2, getHeight()-1);
+            g.drawOval(1, 1, getWidth()-2, getHeight()-2);
+            g.drawOval(2, 2, getWidth()-3, getHeight()-4);
+            g.drawOval(2, 2, getWidth()-4, getHeight()-3);
+            g.drawOval(2, 2, getWidth()-4, getHeight()-4);
+            g.drawOval(3, 3, getWidth()-5, getHeight()-6);
+            g.drawOval(3, 3, getWidth()-6, getHeight()-5);
+            g.drawOval(3, 3, getWidth()-6, getHeight()-6);
         }
     }
 }

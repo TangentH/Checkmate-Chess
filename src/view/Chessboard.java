@@ -31,7 +31,7 @@ public class Chessboard extends JComponent {
     //all chessComponents in this chessboard are shared only one model controller
     private final ClickController clickController = new ClickController(this);  //TODO
     private final int CHESS_SIZE;
-    private JLabel colorLabel;
+    private JLabel colorLabel;//用于显示当前行棋方的label
 
 
     public Chessboard(int width, int height, JLabel colorLabel) {

@@ -44,7 +44,7 @@ public class Welcome extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Play button clicked");
-                ChessGameFrame chessGameFrame = new ChessGameFrame(1000, 760);
+                ChessGameFrame chessGameFrame = new ChessGameFrame(1050, 820);
                 chessGameFrame.setVisible(true);
                 Main.welcomeFrame.setVisible((false));
             }
@@ -62,9 +62,5 @@ public class Welcome extends JFrame {
             }
         });
 
-
-        //23:14
-
-        //2022/5/8 23:13
     }
 }
