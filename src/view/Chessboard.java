@@ -86,7 +86,10 @@ public class Chessboard extends JComponent {
         initPawnOnBoard(6, 5, ChessColor.WHITE);
         initPawnOnBoard(6, 6, ChessColor.WHITE);
         initPawnOnBoard(6, 7, ChessColor.WHITE);
-        ChessComponent.chessComponents = this.getChessComponents();//给chessComponents传一个静态参数（棋盘）方便swapLocation时检查棋盘看是否升变
+        ChessComponent.chessComponents = this.getChessComponents();
+        //给chessComponents传一个静态参数（棋盘）方便swapLocation时检查棋盘看是否升变
+        ChessComponent.setChessboard(this);
+        //给chessComponent传一个静态参数（棋盘），方便棋盘格正确变色
     }
 
     public ChessComponent[][] getChessComponents() {
