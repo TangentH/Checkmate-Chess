@@ -119,16 +119,17 @@ public class Chessboard extends JComponent {
         if (chess1 instanceof KingChessComponent && !(chess2 instanceof RookChessComponent)) {
             ((KingChessComponent) chess1).setKingCanCastle(false);
         }
-        if (!(chess2 instanceof EmptySlotComponent)) {  //吃子操作
-            remove(chess2);     //直接从所有组件中移除
-            add(chess2 = new EmptySlotComponent(chess2.getChessboardPoint(), chess2.getLocation(), clickController, CHESS_SIZE));   //chess2指向了空棋子这个对象
-        }
-        if (chess1 instanceof PawnChessComponent && chess1.getChessboardPoint().getY() != chess2.getChessboardPoint().getY() && chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()] instanceof PawnChessComponent && chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()].getChessColor() != chess1.getChessColor()){  //如果是吃过路兵
+        if (chess2 instanceof EmptySlotComponent && chess1 instanceof PawnChessComponent && chess1.getChessboardPoint().getY() != chess2.getChessboardPoint().getY() && chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()] instanceof PawnChessComponent && chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()].getChessColor() != chess1.getChessColor()){  //如果是吃过路兵
             //把被吃的兵移除并更换为空棋子
             remove(chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()]);
             add(chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()] = new EmptySlotComponent(chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()].getChessboardPoint(), chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()].getLocation(), clickController, CHESS_SIZE));
             chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()].repaint();
         }
+        if (!(chess2 instanceof EmptySlotComponent)) {  //吃子操作
+            remove(chess2);     //直接从所有组件中移除
+            add(chess2 = new EmptySlotComponent(chess2.getChessboardPoint(), chess2.getLocation(), clickController, CHESS_SIZE));   //chess2指向了空棋子这个对象
+        }
+
         chess1.swapLocation(chess2);//如果目标位置是对方棋子，则上面操作将对方棋子先更换为空白棋子，然后swap；如果不满足以上if条件，则可以直接swap
         int row1 = chess1.getChessboardPoint().getX(), col1 = chess1.getChessboardPoint().getY();
         chessComponents[row1][col1] = chess1;
@@ -184,6 +185,39 @@ public class Chessboard extends JComponent {
             king.setKingCanCastle(false);
         }
     }
+
+    //判断是否被将军的方法
+    public static boolean checkmate(ChessColor currentColor){
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessComponent king = ChessComponent.chessComponents[i][j];
+                if (king instanceof KingChessComponent){
+                    for (int k = 0; k < 8; k++) {
+                        for (int l = 0; l < 8; l++) {
+                            ChessComponent chess = ChessComponent.chessComponents[k][l];
+                            if (!(chess instanceof EmptySlotComponent) && king.getChessColor() != chess.getChessColor() && chess.canMoveTo(ChessComponent.chessComponents , king.getChessboardPoint()) && chess.getChessColor() == currentColor){
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //TODO
     public void initiateEmptyChessboard() {
