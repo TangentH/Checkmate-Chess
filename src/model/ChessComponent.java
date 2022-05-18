@@ -30,6 +30,8 @@ public abstract class ChessComponent extends JComponent {
     protected static Color mouseOn = new Color(186, 202, 43, 255);
     protected static Color clicked = new Color(246, 246, 105, 255);
     private boolean isMouseOn = false;
+    private boolean canBeCaptured = false;
+    //在显示合法落子点的时候用于检测该棋子能否被captured，空棋子和具体棋子的应对方式不同
     /**
      * handle click event
      */
@@ -59,6 +61,14 @@ public abstract class ChessComponent extends JComponent {
         this.chessColor = chessColor;
         this.selected = false;
         this.clickController = clickController;
+    }
+
+    public boolean getCanBeCaptured() {
+        return canBeCaptured;
+    }
+
+    public void setCanBeCaptured(boolean canBeCaptured) {
+        this.canBeCaptured = canBeCaptured;
     }
 
     //设置和获取chessboard只是为了获得当前行棋方，方便鼠标移动到棋盘格上，只有当前行棋方的棋盘格会变色
@@ -166,7 +176,7 @@ public abstract class ChessComponent extends JComponent {
     public abstract void loadResource() throws IOException;
 
     @Override
-    protected void paintComponent(Graphics g) {//TODO:此处包含了黑白棋盘格的绘制
+    protected void paintComponent(Graphics g) {//TODO:此处包含了黑白棋盘格的绘制,每次调用repaint()方法时都会自动调用这个重写的方法，这个方法本身不需要自己来调用
         super.paintComponents(g);
         System.out.printf("repaint chess [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
         Color squareColor;

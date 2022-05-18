@@ -8,6 +8,7 @@ import model.EmptySlotComponent;
 import model.KingChessComponent;
 import model.RookChessComponent;
 import view.Chessboard;
+import view.ChessboardPoint;
 
 public class ClickController {
     private final Chessboard chessboard;
@@ -24,13 +25,18 @@ public class ClickController {
                 chessComponent.setSelected(true);
                 first = chessComponent;
                 first.repaint();//情况变化后，一定要repaint chessComponent
+                checkValidMovements(chessComponent);
+                paintValidMovements();
             }
         } else {
             if (first == chessComponent) {      // 再次点击取消选取
                 chessComponent.setSelected(false);
                 ChessComponent recordFirst = first;
                 first = null;
-                recordFirst.repaint();//要把原来选取的位置repaint
+                recordFirst.repaint();
+                //要把原来选取的位置repaint
+                clearValidMovements();
+                chessboard.repaint();
             } //以下这个else if判断的是王车易位
             else if ((first.getChessColor() == chessComponent.getChessColor()) &&
                     (first instanceof RookChessComponent && chessComponent instanceof KingChessComponent
@@ -50,19 +56,28 @@ public class ClickController {
                     first.setSelected(false);
                     first = null;//成功行棋后，自动将clickController的选定设为null
                 }
+                clearValidMovements();
+                chessboard.repaint();
             } else if (handleSecond(chessComponent)) {       //选取移动位置后的反应
                 //repaint in swap chess method.
                 chessboard.swapChessComponents(first, chessComponent);
                 chessboard.swapColor();
                 first.setSelected(false);
                 first = null;//成功行棋后，自动将clickController的选定设为null
-            }else if(chessComponent.getChessColor()==first.getChessColor()){
+                clearValidMovements();
+                chessboard.repaint();
+            } else if (chessComponent.getChessColor() == first.getChessColor()) {
+                //用于简化选取流程的语句：只要选了同一方的棋子且不是王车易位，就可以自动更换选取的棋子
+                clearValidMovements();
+                chessboard.repaint();
                 first.setSelected(false);
                 chessComponent.setSelected(true);
                 ChessComponent recordFirst = first;
                 first = chessComponent;
                 first.repaint();
                 recordFirst.repaint();
+                checkValidMovements(chessComponent);
+                paintValidMovements();
             }
         }
     }
@@ -121,5 +136,36 @@ public class ClickController {
     //FIXME:以下方法用于检查王车易位条件2和3，这个判断暂未加入到代码中
     public boolean WithoutCheckmate() {
         return true;
+    }
+
+    //用于检测合法落子点的方法
+    public void checkValidMovements(ChessComponent chessComponent) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (chessComponent.canMoveTo(chessboard.getChessComponents(), new ChessboardPoint(i, j))
+                        && chessboard.getChessComponents()[i][j].getChessColor() != chessComponent.getChessColor()) {
+                    //遍历整个棋盘，找到可以移动到的棋子
+                    chessboard.getChessComponents()[i][j].setCanBeCaptured(true);
+                }
+            }
+        }
+    }
+
+    public void paintValidMovements() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (chessboard.getChessComponents()[i][j].getCanBeCaptured()) {
+                    chessboard.getChessComponents()[i][j].repaint();
+                }
+            }
+        }
+    }
+
+    public void clearValidMovements() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                chessboard.getChessComponents()[i][j].setCanBeCaptured(false);
+            }
+        }
     }
 }
