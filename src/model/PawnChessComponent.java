@@ -61,8 +61,8 @@ public class PawnChessComponent extends ChessComponent {
         }
     }
 
-    public PawnChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size) {
-        super(chessboardPoint, location, color, listener, size);
+    public PawnChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size, char name) {
+        super(chessboardPoint, location, color, listener, size, name);
         initiateRookImage(color);
     }
 

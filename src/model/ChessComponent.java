@@ -52,8 +52,9 @@ public abstract class ChessComponent extends JComponent {
     public static ChessGameFrame chessGameFrame;
     public static ChessComponent[][] chessComponents;
     private static Chessboard chessboard;
+    protected char name; //R/r=rooks, N/n=knights, B/b=bishops, Q/q=queen, K/k=king, P/p=pawns, _=EmptySlot, w=white, b=black , 大写代表黑方，小写代表白方
 
-    public ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size) {
+    public ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size, char name) {
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);    //TODO:这段代码的意思
         setLocation(location);
         setSize(size, size);
@@ -61,6 +62,7 @@ public abstract class ChessComponent extends JComponent {
         this.chessColor = chessColor;
         this.selected = false;
         this.clickController = clickController;
+        this.name = name;
     }
 
     public boolean getCanBeCaptured() {
@@ -98,6 +100,10 @@ public abstract class ChessComponent extends JComponent {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public char getChessName() {
+        return name;
     }
 
     /**
@@ -140,7 +146,11 @@ public abstract class ChessComponent extends JComponent {
         if (e.getID() == MouseEvent.MOUSE_PRESSED && chessGameFrame.wRook == null && chessGameFrame.bRook == null) {
             //TODO:只有不存在升变按钮时，才可以正常下棋，只检查双方的其中一个升变按钮
             System.out.printf("Click [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
-            clickController.onClick(this);//把自己传入clickController
+            try {
+                clickController.onClick(this);//把自己传入clickController
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
         if (e.getID() == MouseEvent.MOUSE_ENTERED && chessGameFrame.wRook == null && chessGameFrame.bRook == null) {
             //鼠标移入
