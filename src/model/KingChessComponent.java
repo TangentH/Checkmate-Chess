@@ -95,23 +95,13 @@ public class KingChessComponent extends ChessComponent {
      */
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-//        g.drawImage(rookImage, 0, 0, getWidth() - 13, getHeight() - 20, this);
-        g.drawImage(kingImage, 0, 0, getWidth(), getHeight(), this);
-        g.setColor(Color.BLACK);
+        super.paintComponent(g);//在绘制了棋盘格的基础上，再添加上王的图片，这里应该有图层的思想
         if (isSelected()) { // Highlights the model if selected.
-            g.setColor(Color.LIGHT_GRAY);
-            g.drawOval(0, 0, getWidth(), getHeight());
-            g.drawOval(0, 0, getWidth(), getHeight());
-            g.drawOval(1, 1, getWidth()-1, getHeight()-2);
-            g.drawOval(1, 1, getWidth()-2, getHeight()-1);
-            g.drawOval(1, 1, getWidth()-2, getHeight()-2);
-            g.drawOval(2, 2, getWidth()-3, getHeight()-4);
-            g.drawOval(2, 2, getWidth()-4, getHeight()-3);
-            g.drawOval(2, 2, getWidth()-4, getHeight()-4);
-            g.drawOval(3, 3, getWidth()-5, getHeight()-6);
-            g.drawOval(3, 3, getWidth()-6, getHeight()-5);
-            g.drawOval(3, 3, getWidth()-6, getHeight()-6);
+            g.setColor(clicked);
+            g.fillRect(0, 0, this.getWidth(), this.getHeight());
         }
+        g.drawImage(kingImage, 0, 0, getWidth(), getHeight(), this);//这里将王的图片绘制到棋盘上
+//        g.setColor(Color.BLACK);
+
     }
 }
