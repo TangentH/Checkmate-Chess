@@ -26,7 +26,7 @@ public abstract class ChessComponent extends JComponent {
 
 //    private static final Dimension CHESSGRID_SIZE = new Dimension(1080 / 4 * 3 / 8, 1080 / 4 * 3 / 8);    //TODO:这段代码的意思是？
     private static final Color[] BACKGROUND_COLORS = {new Color(235, 236, 208, 255), new Color(119, 149, 86, 255)};
-    //应该指的是chessComponent有两种颜色选择
+    //应该指的是chessComponent有两种颜色选择,最后一个值应该是透明度
     protected static Color mouseOn = new Color(186, 202, 43, 255);
     protected static Color clicked = new Color(246, 246, 105, 255);
     private boolean isMouseOn = false;
@@ -52,6 +52,8 @@ public abstract class ChessComponent extends JComponent {
     public static ChessGameFrame chessGameFrame;
     public static ChessComponent[][] chessComponents;
     private static Chessboard chessboard;
+    protected Color squareColor;//记录这个棋盘格下面的颜色
+    protected boolean isMoving;
 
     public ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size) {
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);    //TODO:这段代码的意思
@@ -61,6 +63,14 @@ public abstract class ChessComponent extends JComponent {
         this.chessColor = chessColor;
         this.selected = false;
         this.clickController = clickController;
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
     }
 
     public boolean getCanBeCaptured() {
@@ -140,7 +150,11 @@ public abstract class ChessComponent extends JComponent {
         if (e.getID() == MouseEvent.MOUSE_PRESSED && chessGameFrame.wRook == null && chessGameFrame.bRook == null) {
             //TODO:只有不存在升变按钮时，才可以正常下棋，只检查双方的其中一个升变按钮
             System.out.printf("Click [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
-            clickController.onClick(this);//把自己传入clickController
+            try {
+                clickController.onClick(this);//把自己传入clickController
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
         }
         if (e.getID() == MouseEvent.MOUSE_ENTERED && chessGameFrame.wRook == null && chessGameFrame.bRook == null) {
             //鼠标移入
@@ -179,7 +193,6 @@ public abstract class ChessComponent extends JComponent {
     protected void paintComponent(Graphics g) {//TODO:此处包含了黑白棋盘格的绘制,每次调用repaint()方法时都会自动调用这个重写的方法，这个方法本身不需要自己来调用
         super.paintComponents(g);
         System.out.printf("repaint chess [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
-        Color squareColor;
         if (isMouseOn) {
             //当鼠标移动到棋子上时
             squareColor = mouseOn;

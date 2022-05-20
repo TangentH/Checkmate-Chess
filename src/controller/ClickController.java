@@ -3,12 +3,10 @@ package controller;
 //所有chessComponent共用同一个clickController
 //clickController隶属于chessboard,将chessboard的clickController传入每一个chessComponent
 
-import model.ChessComponent;
-import model.EmptySlotComponent;
-import model.KingChessComponent;
-import model.RookChessComponent;
-import view.Chessboard;
-import view.ChessboardPoint;
+import model.*;
+import view.*;
+
+import java.awt.*;
 
 public class ClickController {
     private final Chessboard chessboard;
@@ -18,7 +16,7 @@ public class ClickController {
         this.chessboard = chessboard;
     }
 
-    public void onClick(ChessComponent chessComponent) {
+    public void onClick(ChessComponent chessComponent) throws InterruptedException {
         //棋盘格被点击后的反应
         if (first == null) {    //如果现在没有棋子被选取
             if (handleFirst(chessComponent)) {
@@ -60,11 +58,12 @@ public class ClickController {
                 chessboard.repaint();
             } else if (handleSecond(chessComponent)) {       //选取移动位置后的反应
                 //repaint in swap chess method.
+                first.setSelected(false);
+                clearValidMovements();
+                movingTo(chessComponent);//绘制动画
                 chessboard.swapChessComponents(first, chessComponent);
                 chessboard.swapColor();
-                first.setSelected(false);
                 first = null;//成功行棋后，自动将clickController的选定设为null
-                clearValidMovements();
                 chessboard.repaint();
             } else if (chessComponent.getChessColor() == first.getChessColor()) {
                 //用于简化选取流程的语句：只要选了同一方的棋子且不是王车易位，就可以自动更换选取的棋子
@@ -167,5 +166,32 @@ public class ClickController {
                 chessboard.getChessComponents()[i][j].setCanBeCaptured(false);
             }
         }
+    }
+
+    /**
+     * 以下方法只负责动画，动画完成后，棋子在坐标上会回到原处，但是窗口中的棋盘中则不会
+     */
+    public void movingTo(ChessComponent chessComponent) throws InterruptedException {
+        first.setMoving(true);
+        int firstX = first.getX();//first是clickController的chessComponent字段
+        int firstY = first.getY();
+        int secondX = chessComponent.getX();
+        int secondY = chessComponent.getY();
+        int n = 50;//n表示刷新次数
+//        chessboard.setOpaque(false);
+        first.setOpaque(true);
+        for (int i = 1; i <= n; i++) {
+            first.setLocation(firstX + (secondX - firstX) * i / n, firstY + (secondY - firstY) * i / n);
+            //这句话可以将firs置于顶层，不会被其他组件覆盖
+            chessboard.paintImmediately(0, 0, 76 * 8, 76 * 8);//神出鬼没
+//            first.paintImmediately(0, 0, 76, 76);//神龙摆尾
+            //不能使用repaint,repaint好像不会立即被执行，是个多线程方法？
+            Thread.sleep(100 / n);//总时长为100毫秒
+        }
+        first.setLocation(firstX, firstY);
+        //将第一个棋子的状态返回到初始状态，避免（可能）swapLocation出bug
+        //确保图层绘制不出问题（少了这句，棋子移动到终点会消失
+        first.setMoving(false);
+        first.setOpaque(false);
     }
 }

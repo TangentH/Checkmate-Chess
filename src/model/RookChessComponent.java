@@ -122,24 +122,24 @@ public class RookChessComponent extends ChessComponent {
      */
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
         if (isSelected()) { // Highlights the model if selected.
+            super.paintComponent(g);
             g.setColor(clicked);
             g.fillRect(0, 0, this.getWidth(), this.getHeight());
+            g.drawImage(rookImage, 0, 0, getWidth(), getHeight(), this);
         } else if (getCanBeCaptured()) {
+            super.paintComponent(g);
             g.setColor(Color.LIGHT_GRAY);
-            g.drawOval(0, 0, getWidth(), getHeight());
-            g.drawOval(0, 0, getWidth(), getHeight());
-            g.drawOval(1, 1, getWidth() - 1, getHeight() - 2);
-            g.drawOval(1, 1, getWidth() - 2, getHeight() - 1);
-            g.drawOval(1, 1, getWidth() - 2, getHeight() - 2);
-            g.drawOval(2, 2, getWidth() - 3, getHeight() - 4);
-            g.drawOval(2, 2, getWidth() - 4, getHeight() - 3);
-            g.drawOval(2, 2, getWidth() - 4, getHeight() - 4);
-            g.drawOval(3, 3, getWidth() - 5, getHeight() - 6);
-            g.drawOval(3, 3, getWidth() - 6, getHeight() - 5);
-            g.drawOval(3, 3, getWidth() - 6, getHeight() - 6);
+            g.fillOval(0, 0, getWidth(), getHeight());
+            g.setColor(squareColor);
+            g.fillOval(5, 5, 66, 66);
+            g.drawImage(rookImage, 0, 0, getWidth(), getHeight(), this);
+        } else if (isMoving) {
+            //如果棋子在移动，就不用绘制棋盘格
+            g.drawImage(rookImage, 0, 0, getWidth(), getHeight(), this);
+        } else {
+            super.paintComponent(g);
+            g.drawImage(rookImage, 0, 0, getWidth(), getHeight(), this);
         }
-        g.drawImage(rookImage, 0, 0, getWidth(), getHeight(), this);
     }
 }
