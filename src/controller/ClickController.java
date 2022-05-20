@@ -8,6 +8,13 @@ import view.*;
 
 import java.awt.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+import static model.ChessComponent.getChessboard;
+
 public class ClickController {
     private final Chessboard chessboard;
     private ChessComponent first;
@@ -65,6 +72,9 @@ public class ClickController {
                 chessboard.swapColor();
                 first = null;//成功行棋后，自动将clickController的选定设为null
                 chessboard.repaint();
+                if (checkmate()){ //检查是否被将军
+                    System.out.println("--------------------Checkmate!------------------------");
+                }
             } else if (chessComponent.getChessColor() == first.getChessColor()) {
                 //用于简化选取流程的语句：只要选了同一方的棋子且不是王车易位，就可以自动更换选取的棋子
                 clearValidMovements();
@@ -80,6 +90,50 @@ public class ClickController {
             }
         }
     }
+
+    //存档
+    public void saveGame() throws IOException {
+        File file = new File("D:\\Project\\ChessProject\\ChessDemo\\resource\\save2.txt");
+        System.out.println(file.createNewFile());
+        System.out.println("-----------------------");
+        FileOutputStream fos = new FileOutputStream("D:\\Project\\ChessProject\\ChessDemo\\resource\\save2.txt");  //创建文件输出流对象
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                fos.write(ChessComponent.chessComponents[i][j].getChessName()); //将棋盘转为字符写入文件
+            }
+            fos.write("\n".getBytes(StandardCharsets.UTF_8));  //换行符
+        }
+
+//        if (currentColor == ChessColor.WHITE){
+//            fos.write("w".getBytes(StandardCharsets.UTF_8)); //行棋方为白方，写入w
+//        }else{
+//            fos.write("b".getBytes(StandardCharsets.UTF_8)); //行棋方为黑方，写入b
+//        }
+        fos.write("w".getBytes(StandardCharsets.UTF_8));
+
+        fos.close(); //释放资源
+    }
+
+    //判断是否被将军的方法
+    public static boolean checkmate(){
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessComponent king = ChessComponent.chessComponents[i][j]; //遍历棋盘，找到王
+                if (king instanceof KingChessComponent){
+                    for (int k = 0; k < 8; k++) {
+                        for (int l = 0; l < 8; l++) {
+                            ChessComponent chess = ChessComponent.chessComponents[k][l];
+                            if (!(chess instanceof EmptySlotComponent) && king.getChessColor() != chess.getChessColor() && chess.canMoveTo(ChessComponent.chessComponents , king.getChessboardPoint()) && chess.getChessColor() != getChessboard().getCurrentColor()){
+                                return true; //再次遍历棋盘，找到能将王的棋子
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 
     /**
      * @param chessComponent 目标选取的棋子

@@ -54,8 +54,9 @@ public abstract class ChessComponent extends JComponent {
     private static Chessboard chessboard;
     protected Color squareColor;//记录这个棋盘格下面的颜色
     protected boolean isMoving;
+    protected char name; //R/r=rooks, N/n=knights, B/b=bishops, Q/q=queen, K/k=king, P/p=pawns, _=EmptySlot, w=white, b=black , 大写代表黑方，小写代表白方
 
-    public ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size) {
+    public ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size, char name) {
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);    //TODO:这段代码的意思
         setLocation(location);
         setSize(size, size);
@@ -63,6 +64,7 @@ public abstract class ChessComponent extends JComponent {
         this.chessColor = chessColor;
         this.selected = false;
         this.clickController = clickController;
+        this.name = name;
     }
 
     public boolean isMoving() {
@@ -108,6 +110,10 @@ public abstract class ChessComponent extends JComponent {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public char getChessName() {
+        return name;
     }
 
     /**

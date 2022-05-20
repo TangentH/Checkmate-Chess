@@ -61,8 +61,8 @@ public class QueenChessComponent extends ChessComponent {
         }
     }
 
-    public QueenChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size) {
-        super(chessboardPoint, location, color, listener, size);
+    public QueenChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size, char name) {
+        super(chessboardPoint, location, color, listener, size, name);
         initiateQueenImage(color);
     }
 

@@ -156,7 +156,7 @@ public class ChessGameFrame extends JFrame {
                 if (chessComponents[0][i] instanceof PawnChessComponent) {
                     PawnChessComponent pawn = (PawnChessComponent) chessComponents[0][i];
                     chessboard.remove(pawn);
-                    chessComponents[0][i] = new RookChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessComponents[0][i] = new RookChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE(), 'r');
                     chessboard.putChessOnBoard(chessComponents[0][i]);
                     removeWhitePromotionButtons();
                     this.repaint();
@@ -176,7 +176,7 @@ public class ChessGameFrame extends JFrame {
                 if (chessComponents[0][i] instanceof PawnChessComponent) {
                     PawnChessComponent pawn = (PawnChessComponent) chessComponents[0][i];
                     chessboard.remove(pawn);
-                    chessComponents[0][i] = new QueenChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessComponents[0][i] = new QueenChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE(), 'q');
                     chessboard.putChessOnBoard(chessComponents[0][i]);
                     removeWhitePromotionButtons();
                     this.repaint();
@@ -196,7 +196,7 @@ public class ChessGameFrame extends JFrame {
                 if (chessComponents[0][i] instanceof PawnChessComponent) {
                     PawnChessComponent pawn = (PawnChessComponent) chessComponents[0][i];
                     chessboard.remove(pawn);
-                    chessComponents[0][i] = new KnightChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessComponents[0][i] = new KnightChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE(), 'n');
                     chessboard.putChessOnBoard(chessComponents[0][i]);
                     removeWhitePromotionButtons();
                     this.repaint();
@@ -216,7 +216,7 @@ public class ChessGameFrame extends JFrame {
                 if (chessComponents[0][i] instanceof PawnChessComponent) {
                     PawnChessComponent pawn = (PawnChessComponent) chessComponents[0][i];
                     chessboard.remove(pawn);
-                    chessComponents[0][i] = new BishopChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessComponents[0][i] = new BishopChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE(), 'b');
                     chessboard.putChessOnBoard(chessComponents[0][i]);
                     removeWhitePromotionButtons();
                     this.repaint();
@@ -244,7 +244,7 @@ public class ChessGameFrame extends JFrame {
                 if (chessComponents[7][i] instanceof PawnChessComponent) {
                     PawnChessComponent pawn = (PawnChessComponent) chessComponents[7][i];
                     chessboard.remove(pawn);
-                    chessComponents[7][i] = new RookChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessComponents[7][i] = new RookChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE(), 'R');
                     chessboard.putChessOnBoard(chessComponents[7][i]);
                     removeBlackPromotionButtons();
                     this.repaint();
@@ -264,7 +264,7 @@ public class ChessGameFrame extends JFrame {
                 if (chessComponents[7][i] instanceof PawnChessComponent) {
                     PawnChessComponent pawn = (PawnChessComponent) chessComponents[7][i];
                     chessboard.remove(pawn);
-                    chessComponents[7][i] = new QueenChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessComponents[7][i] = new QueenChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE(), 'Q');
                     chessboard.putChessOnBoard(chessComponents[7][i]);
                     removeBlackPromotionButtons();
                     this.repaint();
@@ -284,7 +284,7 @@ public class ChessGameFrame extends JFrame {
                 if (chessComponents[7][i] instanceof PawnChessComponent) {
                     PawnChessComponent pawn = (PawnChessComponent) chessComponents[7][i];
                     chessboard.remove(pawn);
-                    chessComponents[7][i] = new KnightChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessComponents[7][i] = new KnightChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE(), 'N');
                     chessboard.putChessOnBoard(chessComponents[7][i]);
                     removeBlackPromotionButtons();
                     this.repaint();
@@ -304,7 +304,7 @@ public class ChessGameFrame extends JFrame {
                 if (chessComponents[7][i] instanceof PawnChessComponent) {
                     PawnChessComponent pawn = (PawnChessComponent) chessComponents[7][i];
                     chessboard.remove(pawn);
-                    chessComponents[7][i] = new BishopChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE());
+                    chessComponents[7][i] = new BishopChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE() ,'B');
                     chessboard.putChessOnBoard(chessComponents[7][i]);
                     removeBlackPromotionButtons();
                     this.repaint();
