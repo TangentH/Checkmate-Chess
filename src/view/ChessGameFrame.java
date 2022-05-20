@@ -5,6 +5,10 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 这个类表示游戏过程中的整个游戏界面，是一切的载体
@@ -40,6 +44,7 @@ public class ChessGameFrame extends JFrame {
         addLoadButton();
         addRestartButton();
         addBackButton();
+        addSaveButton();
     }
 
 
@@ -136,6 +141,45 @@ public class ChessGameFrame extends JFrame {
             this.setVisible(false);
             Main.welcomeFrame.setVisible(true);
         });
+    }
+
+    private void addSaveButton() {
+        JButton button = new JButton("Save");
+        button.setLocation(HEIGTH, HEIGTH / 10 + 580);
+        button.setSize(200, 60);
+        button.setFont(new Font("Rockwell", Font.BOLD, 20));
+        add(button);
+
+        button.addActionListener(e -> {
+            try {
+                saveGame();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+    }
+
+    //存档
+    public void saveGame() throws IOException {
+        int n = 3 ;
+        File file = new File("resource\\save" + n +".txt");
+        System.out.println(file.createNewFile());
+        System.out.println("-----------------------");
+        FileOutputStream fos = new FileOutputStream("resource\\save"+ n +".txt");  //创建文件输出流对象
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                fos.write(ChessComponent.chessComponents[i][j].getChessName());  //将棋盘转为字符写入文件
+            }
+            fos.write("\n".getBytes(StandardCharsets.UTF_8));  //换行符
+        }
+
+        if (chessboard.getCurrentColor() == ChessColor.WHITE){
+            fos.write("w".getBytes(StandardCharsets.UTF_8));  //行棋方为白方，写入w
+        }else{
+            fos.write("b".getBytes(StandardCharsets.UTF_8));  //行棋方为黑方，写入b
+        }
+
+        fos.close();  //释放资源
     }
 
     //TODO：添加白兵升变时候显示的按钮

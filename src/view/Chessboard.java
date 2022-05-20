@@ -13,8 +13,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static model.ChessComponent.getChessboard;
-import static model.ChessComponent.record;
+import static model.ChessComponent.*;
 
 /**
  * 这个类表示面板上的棋盘组件对象
@@ -319,50 +318,50 @@ public class Chessboard extends JComponent {
             }
 
 //            初始化棋盘
-//            for (int i = 0; i < 8; i++) {
-//                for (int j = 0; j < 8; j++) {
-//                    switch (chessData.get(i).charAt(j)) {
-//                        case 'R':
-//                            setChessComponents(i, j, new RookChessComponent(i, j, ChessColor.BLACK, 'R', this.chessComponents));
-//                            break;
-//                        case 'N':
-//                            setChessComponents(i, j, new KnightChessComponent(i, j, ChessColor.BLACK, 'N', this.chessComponents));
-//                            break;
-//                        case 'B':
-//                            setChessComponents(i, j, new BishopChessComponent(i, j, ChessColor.BLACK, 'B', this.chessComponents));
-//                            break;
-//                        case 'Q':
-//                            setChessComponents(i, j, new QueenChessComponent(i, j, ChessColor.BLACK, 'Q', this.chessComponents));
-//                            break;
-//                        case 'K':
-//                            setChessComponents(i, j, new KingChessComponent(i, j, ChessColor.BLACK, 'K', this.chessComponents));
-//                            break;
-//                        case 'P':
-//                            setChessComponents(i, j, new PawnChessComponent(i, j, ChessColor.BLACK, 'P', this.chessComponents));
-//                            break;
-//                        case 'r':
-//                            setChessComponents(i, j, new RookChessComponent(i, j, ChessColor.WHITE, 'r', this.chessComponents));
-//                            break;
-//                        case 'n':
-//                            setChessComponents(i, j, new KnightChessComponent(i, j, ChessColor.WHITE, 'n', this.chessComponents));
-//                            break;
-//                        case 'b':
-//                            setChessComponents(i, j, new BishopChessComponent(i, j, ChessColor.WHITE, 'b', this.chessComponents));
-//                            break;
-//                        case 'q':
-//                            setChessComponents(i, j, new QueenChessComponent(i, j, ChessColor.WHITE, 'q', this.chessComponents));
-//                            break;
-//                        case 'k':
-//                            setChessComponents(i, j, new KingChessComponent(i, j, ChessColor.WHITE, 'k', this.chessComponents));
-//                            break;
-//                        case 'p':
-//                            setChessComponents(i, j, new PawnChessComponent(i, j, ChessColor.WHITE, 'p', this.chessComponents));
-//                            break;
-//                        case '_':
-//                            setChessComponents(i, j, new EmptySlotComponent(i, j, ChessColor.NONE, '_', this.chessComponents));
-//                    }
-//                }
-//            }
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    switch (chessData.get(i).charAt(j)) {
+                        case 'R':
+                            setChessComponents(i, j, new RookChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'R'));
+                            break;
+                        case 'N':
+                            setChessComponents(i, j, new KnightChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'N'));
+                            break;
+                        case 'B':
+                            setChessComponents(i, j, new BishopChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'B'));
+                            break;
+                        case 'Q':
+                            setChessComponents(i, j, new QueenChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'Q'));
+                            break;
+                        case 'K':
+                            setChessComponents(i, j, new KingChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'K'));
+                            break;
+                        case 'P':
+                            setChessComponents(i, j, new PawnChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'P'));
+                            break;
+                        case 'r':
+                            setChessComponents(i, j, new RookChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'r'));
+                            break;
+                        case 'n':
+                            setChessComponents(i, j, new KnightChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'n'));
+                            break;
+                        case 'b':
+                            setChessComponents(i, j, new BishopChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'b'));
+                            break;
+                        case 'q':
+                            setChessComponents(i, j, new QueenChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'q'));
+                            break;
+                        case 'k':
+                            setChessComponents(i, j, new KingChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'k'));
+                            break;
+                        case 'p':
+                            setChessComponents(i, j, new PawnChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'p'));
+                            break;
+                        case '_':
+                            setChessComponents(i, j, new EmptySlotComponent(new ChessboardPoint(i, j), calculatePoint(i, j), clickController, CHESS_SIZE, '_'));
+                    }
+                }
+            }
 
             if (chessData.get(8).contains("w")) {
                 currentColor = ChessColor.WHITE;
@@ -372,28 +371,6 @@ public class Chessboard extends JComponent {
             return true;
         }
         return false;
-    }
-
-    //存档
-    public void saveGame() throws IOException {
-        File file = new File("D:\\Project\\ChessProject\\ChessDemo\\resource\\save2.txt");
-        System.out.println(file.createNewFile());
-        System.out.println("-----------------------");
-        FileOutputStream fos = new FileOutputStream("resource\\save1.txt");  //创建文件输出流对象
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                fos.write(ChessComponent.chessComponents[i][j].getChessName());  //将棋盘转为字符写入文件
-            }
-            fos.write("\n".getBytes(StandardCharsets.UTF_8));  //换行符
-        }
-
-        if (currentColor == ChessColor.WHITE){
-            fos.write("w".getBytes(StandardCharsets.UTF_8));  //行棋方为白方，写入w
-        }else{
-            fos.write("b".getBytes(StandardCharsets.UTF_8));  //行棋方为黑方，写入b
-        }
-
-        fos.close();  //释放资源
     }
 
 

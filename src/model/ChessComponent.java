@@ -116,6 +116,10 @@ public abstract class ChessComponent extends JComponent {
         return name;
     }
 
+    public static void setChessComponents(int i, int j, ChessComponent chessComponent) {
+        chessComponents[i][j] = chessComponent;
+    }
+
     /**
      * @param another 主要用于和另外一个棋子交换位置
      *                <br>
