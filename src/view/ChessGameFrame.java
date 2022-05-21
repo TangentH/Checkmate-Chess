@@ -41,7 +41,7 @@ public class ChessGameFrame extends JFrame {
 //以下是需要显示的窗体组件
         addLabel();
         addChessboard();
-        addHelloButton();
+//        addHelloButton();
         addLoadButton();
         addRestartButton();
         addBackButton();
@@ -74,10 +74,10 @@ public class ChessGameFrame extends JFrame {
     private void addLabel() {
         JLabel statusLabel = new JLabel("Current Player");
         colorLabel = new JLabel("WHITE");
-        statusLabel.setLocation(HEIGTH - 30, 70);//通过窗体的高度计算出来的位置
+        statusLabel.setLocation(HEIGTH - 30-20, 70);//通过窗体的高度计算出来的位置
         statusLabel.setSize(500, 80);//文本框的大小
         statusLabel.setFont(new Font("Rockwell", Font.BOLD, 30));//宋体楷体都能用
-        colorLabel.setLocation(HEIGTH + 25, 100);//通过窗体的高度计算出来的位置
+        colorLabel.setLocation(HEIGTH + 25-20, 100);//通过窗体的高度计算出来的位置
         colorLabel.setSize(500, 80);//文本框的大小
         colorLabel.setFont(new Font("Rockwell", Font.BOLD, 30));//宋体楷体都能用
         add(statusLabel);//把label添加到调用对象中
