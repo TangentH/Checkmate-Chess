@@ -231,7 +231,7 @@ public class ClickController {
         int firstY = first.getY();
         int secondX = chessComponent.getX();
         int secondY = chessComponent.getY();
-        int n = 50;//n表示刷新次数
+        int n = 25;//n表示刷新次数
 //        chessboard.setOpaque(false);
         first.setOpaque(true);
         for (int i = 1; i <= n; i++) {
@@ -240,7 +240,7 @@ public class ClickController {
             chessboard.paintImmediately(0, 0, 76 * 8, 76 * 8);//神出鬼没
 //            first.paintImmediately(0, 0, 76, 76);//神龙摆尾
             //不能使用repaint,repaint好像不会立即被执行，是个多线程方法？
-            Thread.sleep(100 / n);//总时长为100毫秒
+            Thread.sleep(50 / n);//总时长为100毫秒
         }
         first.setLocation(firstX, firstY);
         //将第一个棋子的状态返回到初始状态，避免（可能）swapLocation出bug

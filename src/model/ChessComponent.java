@@ -25,7 +25,7 @@ public abstract class ChessComponent extends JComponent {
      */
 
 //    private static final Dimension CHESSGRID_SIZE = new Dimension(1080 / 4 * 3 / 8, 1080 / 4 * 3 / 8);    //TODO:这段代码的意思是？
-    private static final Color[] BACKGROUND_COLORS = {new Color(235, 236, 208, 255), new Color(119, 149, 86, 255)};
+    private static final Color[] BACKGROUND_COLORS = {new Color(235, 236, 208, 230), new Color(119, 149, 86, 230)};
     //应该指的是chessComponent有两种颜色选择,最后一个值应该是透明度
     protected static Color mouseOn = new Color(186, 202, 43, 255);
     protected static Color clicked = new Color(246, 246, 105, 255);

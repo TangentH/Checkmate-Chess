@@ -22,6 +22,7 @@ public class ChessGameFrame extends JFrame {
     private Chessboard chessboard;
     private JLabel colorLabel;
     public JButton wRook, wQueen, wBishop, wKnight, bRook, bQueen, bBishop, bKnight;//用于兵底线升变的按钮
+    private JLabel background;
 
     public ChessGameFrame(int width, int height) {
         this.setResizable(false);
@@ -45,8 +46,17 @@ public class ChessGameFrame extends JFrame {
         addRestartButton();
         addBackButton();
         addSaveButton();
+        addBackgroundPic();
     }
 
+
+    private void addBackgroundPic() {
+        background = new JLabel();
+        background.setSize(1050,820);
+        background.setIcon(new ImageIcon("images/Background1.png"));
+        background.setLocation(0,0);
+        add(background);
+    }
 
     /**
      * 在游戏面板中添加棋盘
@@ -116,7 +126,9 @@ public class ChessGameFrame extends JFrame {
         button.addActionListener(e -> { //TODO：了解actionListener如何使用
             System.out.println("Click Restart");
             remove(chessboard);
+            remove(background);//背景图片也需要重新加载
             addChessboard();
+            addBackgroundPic();
             this.repaint();
             colorLabel.setText("WHITE");
             //如果在升变过程中遇到了restart，要将升变按钮删除
@@ -161,11 +173,11 @@ public class ChessGameFrame extends JFrame {
 
     //存档
     public void saveGame() throws IOException {
-        int n = 3 ;
-        File file = new File("resource\\save" + n +".txt");
+        int n = 3;
+        File file = new File("resource\\save" + n + ".txt");
         System.out.println(file.createNewFile());
         System.out.println("-----------------------");
-        FileOutputStream fos = new FileOutputStream("resource\\save"+ n +".txt");  //创建文件输出流对象
+        FileOutputStream fos = new FileOutputStream("resource\\save" + n + ".txt");  //创建文件输出流对象
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 fos.write(ChessComponent.chessComponents[i][j].getChessName());  //将棋盘转为字符写入文件
@@ -173,9 +185,9 @@ public class ChessGameFrame extends JFrame {
             fos.write("\n".getBytes(StandardCharsets.UTF_8));  //换行符
         }
 
-        if (chessboard.getCurrentColor() == ChessColor.WHITE){
+        if (chessboard.getCurrentColor() == ChessColor.WHITE) {
             fos.write("w".getBytes(StandardCharsets.UTF_8));  //行棋方为白方，写入w
-        }else{
+        } else {
             fos.write("b".getBytes(StandardCharsets.UTF_8));  //行棋方为黑方，写入b
         }
 
@@ -268,6 +280,8 @@ public class ChessGameFrame extends JFrame {
             }
         });
         add(wBishop);
+        remove(background);
+        addBackgroundPic();
     }
 
     //TODO：添加黑兵升变时显示的按钮
@@ -348,7 +362,7 @@ public class ChessGameFrame extends JFrame {
                 if (chessComponents[7][i] instanceof PawnChessComponent) {
                     PawnChessComponent pawn = (PawnChessComponent) chessComponents[7][i];
                     chessboard.remove(pawn);
-                    chessComponents[7][i] = new BishopChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE() ,'B');
+                    chessComponents[7][i] = new BishopChessComponent(pawn.getChessboardPoint(), pawn.getLocation(), pawn.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE(), 'B');
                     chessboard.putChessOnBoard(chessComponents[7][i]);
                     removeBlackPromotionButtons();
                     this.repaint();
@@ -356,6 +370,8 @@ public class ChessGameFrame extends JFrame {
             }
         });
         add(bBishop);
+        remove(background);
+        addBackgroundPic();
     }
 
     public void removeWhitePromotionButtons() {//清除白子的升变按钮
