@@ -102,7 +102,7 @@ public class KnightChessComponent extends ChessComponent {
             g.drawImage(knightImage, 0, 0, getWidth(), getHeight(), this);
         } else if (getCanBeCaptured()) {
             super.paintComponent(g);
-            g.setColor(Color.LIGHT_GRAY);
+            g.setColor(new Color(0,0,0,30));
             g.fillOval(0, 0, getWidth(), getHeight());
             g.setColor(squareColor);
             g.fillOval(5, 5, 66, 66);
