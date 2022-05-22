@@ -33,12 +33,18 @@ public class KingChessComponent extends ChessComponent {
      * @throws IOException
      */
     public void loadResource() throws IOException {
-        if (KING_WHITE == null) {
+        if (theme == 0) {
             KING_WHITE = ImageIO.read(new File("./images/Chess.comTheme/king-white1.png"));//读取车的贴图信息
         }
+        if (theme == 1) {
+            KING_WHITE = ImageIO.read(new File("./images/DemoTheme/king-white.png"));
+        }
 
-        if (KING_BLACK == null) {
+        if (theme == 0) {
             KING_BLACK = ImageIO.read(new File("./images/Chess.comTheme/king-black1.png"));
+        }
+        if (theme == 1) {
+            KING_BLACK = ImageIO.read(new File("./images/DemoTheme/king-black.png"));
         }
     }
 
@@ -102,7 +108,7 @@ public class KingChessComponent extends ChessComponent {
             g.drawImage(kingImage, 0, 0, getWidth(), getHeight(), this);
         } else if (getCanBeCaptured()) {
             super.paintComponent(g);
-            g.setColor(new Color(0,0,0,30));
+            g.setColor(new Color(0, 0, 0, 30));
             g.fillOval(0, 0, getWidth(), getHeight());
             g.setColor(squareColor);
             g.fillOval(5, 5, 66, 66);

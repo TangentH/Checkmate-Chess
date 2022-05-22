@@ -32,12 +32,18 @@ public class PawnChessComponent extends ChessComponent {
      * @throws IOException
      */
     public void loadResource() throws IOException {
-        if (PAWN_WHITE == null) {
+        if (theme == 0) {
             PAWN_WHITE = ImageIO.read(new File("./images/Chess.comTheme/pawn-white1.png"));
         }
+        if (theme == 1) {
+            PAWN_WHITE = ImageIO.read(new File("./images/DemoTheme/pawn-white.png"));
+        }
 
-        if (PAWN_BLACK == null) {
+        if (theme == 0) {
             PAWN_BLACK = ImageIO.read(new File("./images/Chess.comTheme/pawn-black1.png"));
+        }
+        if (theme == 1) {
+            PAWN_BLACK = ImageIO.read(new File("./images/DemoTheme/pawn-black.png"));
         }
     }
 
@@ -194,7 +200,7 @@ public class PawnChessComponent extends ChessComponent {
             g.drawImage(pawnImage, 0, 0, getWidth(), getHeight(), this);
         } else if (getCanBeCaptured()) {
             super.paintComponent(g);
-            g.setColor(new Color(0,0,0,30));
+            g.setColor(new Color(0, 0, 0, 30));
             g.fillOval(0, 0, getWidth(), getHeight());
             g.setColor(squareColor);
             g.fillOval(5, 5, 66, 66);

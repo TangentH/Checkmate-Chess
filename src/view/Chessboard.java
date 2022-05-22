@@ -43,6 +43,15 @@ public class Chessboard extends JComponent {
     private final int CHESS_SIZE;
     private JLabel colorLabel;//用于显示当前行棋方的label
     public static ChessGameFrame chessGameFrame;
+    private static boolean soundEffectOn = true;//控制音效开关的参数
+
+    public static boolean isSoundEffectOn() {
+        return soundEffectOn;
+    }
+
+    public static void setSoundEffectOn(boolean soundEffectOn) {
+        Chessboard.soundEffectOn = soundEffectOn;
+    }
 
     public ClickController getClickController() {//为了在ChessGameFrame中也能够新建棋子（新建兵底线升变后的棋子），设置该setter，这是新建棋子所需的参数
         return clickController;
@@ -136,19 +145,24 @@ public class Chessboard extends JComponent {
             add(chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()] = new EmptySlotComponent(chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()].getChessboardPoint(), chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()].getLocation(), clickController, CHESS_SIZE, '_'));
             chessComponents[chess1.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()].repaint();
             /**播放capture音效*/
-            SoundEffect_Capture soundEffect_capture = new SoundEffect_Capture();
-            soundEffect_capture.start();
+            if (soundEffectOn) {
+                SoundEffect_Capture soundEffect_capture = new SoundEffect_Capture();
+                soundEffect_capture.start();
+            }
         }
         if (!(chess2 instanceof EmptySlotComponent)) {  //吃子操作
             remove(chess2);     //直接从所有组件中移除
             add(chess2 = new EmptySlotComponent(chess2.getChessboardPoint(), chess2.getLocation(), clickController, CHESS_SIZE, '_'));   //chess2指向了空棋子这个对象
             /**播放move音效*/
-            SoundEffect_Capture soundEffect_capture = new SoundEffect_Capture();
-            soundEffect_capture.start();
+            if (soundEffectOn) {
+                SoundEffect_Capture soundEffect_capture = new SoundEffect_Capture();
+                soundEffect_capture.start();
+            }
         } else {
-            /**播放move音效*/
-            SoundEffect_Move soundEffect_move = new SoundEffect_Move();
-            soundEffect_move.start();
+            /**播放move音效*/if (soundEffectOn) {
+                SoundEffect_Move soundEffect_move = new SoundEffect_Move();
+                soundEffect_move.start();
+            }
         }
         chess1.swapLocation(chess2);//如果目标位置是对方棋子，则上面操作将对方棋子先更换为空白棋子，然后swap；如果不满足以上if条件，则可以直接swap
         int row1 = chess1.getChessboardPoint().getX(), col1 = chess1.getChessboardPoint().getY();
@@ -205,9 +219,10 @@ public class Chessboard extends JComponent {
             king.setKingCanCastle(false);
             rook.setRookCanCastle(false);
         }
-        /**播放音效*/
-        SoundEffect_Move soundEffect_move = new SoundEffect_Move();
-        soundEffect_move.start();
+        /**播放音效*/if (soundEffectOn) {
+            SoundEffect_Move soundEffect_move = new SoundEffect_Move();
+            soundEffect_move.start();
+        }
     }
 
 

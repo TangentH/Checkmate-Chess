@@ -32,12 +32,18 @@ public class KnightChessComponent extends ChessComponent {
      * @throws IOException
      */
     public void loadResource() throws IOException {
-        if (KNIGHT_WHITE == null) {
+        if (theme == 0) {
             KNIGHT_WHITE = ImageIO.read(new File("./images/Chess.comTheme/knight-white1.png"));//读取车的贴图信息
         }
+        if (theme == 1) {
+            KNIGHT_WHITE = ImageIO.read(new File("./images/DemoTheme/knight-white.png"));
+        }
 
-        if (KNIGHT_BLACK == null) {
+        if (theme == 0) {
             KNIGHT_BLACK = ImageIO.read(new File("./images/Chess.comTheme/knight-black1.png"));
+        }
+        if (theme == 1) {
+            KNIGHT_BLACK = ImageIO.read(new File("./images/DemoTheme/knight-black.png"));
         }
     }
 
@@ -102,7 +108,7 @@ public class KnightChessComponent extends ChessComponent {
             g.drawImage(knightImage, 0, 0, getWidth(), getHeight(), this);
         } else if (getCanBeCaptured()) {
             super.paintComponent(g);
-            g.setColor(new Color(0,0,0,30));
+            g.setColor(new Color(0, 0, 0, 30));
             g.fillOval(0, 0, getWidth(), getHeight());
             g.setColor(squareColor);
             g.fillOval(5, 5, 66, 66);

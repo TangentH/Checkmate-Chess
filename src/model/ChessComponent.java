@@ -1,5 +1,6 @@
 package model;
 
+import music.Bgm;
 import view.ChessGameFrame;
 import view.Chessboard;
 import view.ChessboardPoint;
@@ -25,7 +26,7 @@ public abstract class ChessComponent extends JComponent {
      */
 
 //    private static final Dimension CHESSGRID_SIZE = new Dimension(1080 / 4 * 3 / 8, 1080 / 4 * 3 / 8);    //TODO:这段代码的意思是？
-    private static final Color[] BACKGROUND_COLORS = {new Color(235, 236, 208, 230), new Color(119, 149, 86, 230)};
+    private static final Color[] BACKGROUND_COLORS = new Color[2];
     //应该指的是chessComponent有两种颜色选择,最后一个值应该是透明度
     protected static Color mouseOn = new Color(186, 202, 43, 255);
     protected static Color clicked = new Color(246, 246, 105, 255);
@@ -55,6 +56,16 @@ public abstract class ChessComponent extends JComponent {
     protected Color squareColor;//记录这个棋盘格下面的颜色
     protected boolean isMoving;
     protected char name; //R/r=rooks, N/n=knights, B/b=bishops, Q/q=queen, K/k=king, P/p=pawns, _=EmptySlot, w=white, b=black , 大写代表黑方，小写代表白方
+    protected static int theme = 0;
+    //theme=0:chess.com Theme, theme=1: Demo theme
+
+    public static int getTheme() {
+        return theme;
+    }
+
+    public static void setTheme(int t) {
+        theme = t;
+    }
 
     public ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size, char name) {
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);    //TODO:这段代码的意思
@@ -65,6 +76,14 @@ public abstract class ChessComponent extends JComponent {
         this.selected = false;
         this.clickController = clickController;
         this.name = name;
+        if (getTheme() == 0) {
+            BACKGROUND_COLORS[0] = new Color(235, 236, 208, 230);
+            BACKGROUND_COLORS[1] = new Color(119, 149, 86, 230);
+        }
+        if (getTheme() == 1) {
+            BACKGROUND_COLORS[1] = new Color(29, 74, 107, 230);
+            BACKGROUND_COLORS[0] = new Color(255,255,255,230);
+        }
     }
 
     public boolean isMoving() {

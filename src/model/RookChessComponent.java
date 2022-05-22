@@ -40,12 +40,18 @@ public class RookChessComponent extends ChessComponent {
      * @throws IOException
      */
     public void loadResource() throws IOException {
-        if (ROOK_WHITE == null) {
+        if (theme == 0) {
             ROOK_WHITE = ImageIO.read(new File("./images/Chess.comTheme/rook-white1.png"));//读取车的贴图信息
         }
+        if (theme == 1) {
+            ROOK_WHITE = ImageIO.read(new File("./images/DemoTheme/rook-white.png"));
+        }
 
-        if (ROOK_BLACK == null) {
+        if (theme == 0) {
             ROOK_BLACK = ImageIO.read(new File("./images/Chess.comTheme/rook-black1.png"));
+        }
+        if (theme == 1) {
+            ROOK_BLACK = ImageIO.read(new File("./images/DemoTheme/rook-black.png"));
         }
     }
 
@@ -129,7 +135,7 @@ public class RookChessComponent extends ChessComponent {
             g.drawImage(rookImage, 0, 0, getWidth(), getHeight(), this);
         } else if (getCanBeCaptured()) {
             super.paintComponent(g);
-            g.setColor(new Color(0,0,0,30));
+            g.setColor(new Color(0, 0, 0, 30));
             g.fillOval(0, 0, getWidth(), getHeight());
             g.setColor(squareColor);
             g.fillOval(5, 5, 66, 66);

@@ -18,6 +18,16 @@ import static model.ChessComponent.getChessboard;
 public class ClickController {
     private final Chessboard chessboard;
     private ChessComponent first;
+    private static int animationMode = 2;
+    //animation mode: 0:disabled; 1:Dragon tail; 2:Sneak attack
+
+    public static int getAnimationMode() {
+        return animationMode;
+    }
+
+    public static void setAnimationMode(int animationMode) {
+        ClickController.animationMode = animationMode;
+    }
 
     public ClickController(Chessboard chessboard) {
         this.chessboard = chessboard;
@@ -67,12 +77,14 @@ public class ClickController {
                 //repaint in swap chess method.
                 first.setSelected(false);
                 clearValidMovements();
-                movingTo(chessComponent);//TODO:需要绘制动画时调用
+                if (animationMode != 0) {
+                    movingTo(chessComponent);//TODO:需要绘制动画时调用
+                }
                 chessboard.swapChessComponents(first, chessComponent);
                 chessboard.swapColor();
                 first = null;//成功行棋后，自动将clickController的选定设为null
                 chessboard.repaint();
-                if (checkmate()){ //检查是否被将军
+                if (checkmate()) { //检查是否被将军
                     System.out.println("--------------------Checkmate!------------------------");
                 }
             } else if (chessComponent.getChessColor() == first.getChessColor()) {
@@ -115,15 +127,15 @@ public class ClickController {
     }
 
     //判断是否被将军的方法
-    public static boolean checkmate(){
+    public static boolean checkmate() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 ChessComponent king = ChessComponent.chessComponents[i][j]; //遍历棋盘，找到王
-                if (king instanceof KingChessComponent){
+                if (king instanceof KingChessComponent) {
                     for (int k = 0; k < 8; k++) {
                         for (int l = 0; l < 8; l++) {
                             ChessComponent chess = ChessComponent.chessComponents[k][l];
-                            if (!(chess instanceof EmptySlotComponent) && king.getChessColor() != chess.getChessColor() && chess.canMoveTo(ChessComponent.chessComponents , king.getChessboardPoint()) && chess.getChessColor() != getChessboard().getCurrentColor()){
+                            if (!(chess instanceof EmptySlotComponent) && king.getChessColor() != chess.getChessColor() && chess.canMoveTo(ChessComponent.chessComponents, king.getChessboardPoint()) && chess.getChessColor() != getChessboard().getCurrentColor()) {
                                 return true; //再次遍历棋盘，找到能将王的棋子
                             }
                         }
@@ -237,8 +249,12 @@ public class ClickController {
         for (int i = 1; i <= n; i++) {
             first.setLocation(firstX + (secondX - firstX) * i / n, firstY + (secondY - firstY) * i / n);
             //这句话可以将firs置于顶层，不会被其他组件覆盖
-            chessboard.paintImmediately(0, 0, 76 * 8, 76 * 8);//神出鬼没
-//            first.paintImmediately(0, 0, 76, 76);//神龙摆尾
+            if (animationMode == 2) {
+                chessboard.paintImmediately(0, 0, 76 * 8, 76 * 8);//神出鬼没
+            }
+            if (animationMode == 1) {
+                first.paintImmediately(0, 0, 76, 76);//神龙摆尾
+            }
             //不能使用repaint,repaint好像不会立即被执行，是个多线程方法？
             Thread.sleep(50 / n);//总时长为100毫秒
         }

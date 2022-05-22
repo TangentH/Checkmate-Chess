@@ -32,12 +32,18 @@ public class QueenChessComponent extends ChessComponent {
      * @throws IOException
      */
     public void loadResource() throws IOException {
-        if (QUEEN_WHITE == null) {
+        if (theme == 0) {
             QUEEN_WHITE = ImageIO.read(new File("./images/Chess.comTheme/queen-white1.png"));//读取车的贴图信息
         }
+        if (theme == 1) {
+            QUEEN_WHITE = ImageIO.read(new File("./images/DemoTheme/queen-white.png"));
+        }
 
-        if (QUEEN_BLACK == null) {
+        if (theme == 0) {
             QUEEN_BLACK = ImageIO.read(new File("./images/Chess.comTheme/queen-black1.png"));
+        }
+        if (theme == 1) {
+            QUEEN_BLACK = ImageIO.read(new File("./images/DemoTheme/queen-black.png"));
         }
     }
 
@@ -123,7 +129,7 @@ public class QueenChessComponent extends ChessComponent {
             g.drawImage(queenImage, 0, 0, getWidth(), getHeight(), this);
         } else if (getCanBeCaptured()) {
             super.paintComponent(g);
-            g.setColor(new Color(0,0,0,30));
+            g.setColor(new Color(0, 0, 0, 30));
             g.fillOval(0, 0, getWidth(), getHeight());
             g.setColor(squareColor);
             g.fillOval(5, 5, 66, 66);

@@ -32,12 +32,18 @@ public class BishopChessComponent extends ChessComponent {
      * @throws IOException
      */
     public void loadResource() throws IOException {
-        if (BISHOP_WHITE == null) {
+        if (theme == 0) {
             BISHOP_WHITE = ImageIO.read(new File("./images/Chess.comTheme/bishop-white1.png"));//读取车的贴图信息
         }
+        if (theme == 1) {
+            BISHOP_WHITE = ImageIO.read(new File("./images/DemoTheme/bishop-white.png"));
+        }
 
-        if (BISHOP_BLACK == null) {
+        if (theme == 0) {
             BISHOP_BLACK = ImageIO.read(new File("./images/Chess.comTheme/bishop-black1.png"));
+        }
+        if (theme == 1) {
+            BISHOP_BLACK = ImageIO.read(new File("./images/DemoTheme/bishop-black.png"));
         }
     }
 
@@ -62,7 +68,7 @@ public class BishopChessComponent extends ChessComponent {
     }
 
     public BishopChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size, char name) {
-        super(chessboardPoint, location, color, listener, size,name);
+        super(chessboardPoint, location, color, listener, size, name);
         initiateBishopImage(color);
     }
 
@@ -108,7 +114,7 @@ public class BishopChessComponent extends ChessComponent {
             g.drawImage(bishopImage, 0, 0, getWidth(), getHeight(), this);
         } else if (getCanBeCaptured()) {
             super.paintComponent(g);
-            g.setColor(new Color(0,0,0,30));
+            g.setColor(new Color(0, 0, 0, 30));
             g.fillOval(0, 0, getWidth(), getHeight());
             g.setColor(squareColor);
             g.fillOval(5, 5, 66, 66);

@@ -1,5 +1,9 @@
 package view;
 
+import controller.ClickController;
+import model.ChessComponent;
+import music.Bgm;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -87,22 +91,77 @@ public class Welcome extends JFrame {
         bgmRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!bgmRadioButton.isSelected()){
-                    System.out.println("bgm stop!");
-                }else{
+                if (bgmRadioButton.isSelected()) {
+                    System.out.println("bgm on");
+                    Main.bgm.loop = true;
+                    Main.bgm = new Bgm();
+                    Main.bgm.start();
+                } else {
+                    System.out.println("bgm off");
+                    Main.bgm.loop = false;
+                    Main.bgm.stop();
                 }
             }
         });
         fxRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if(fxRadioButton.isSelected()){
+                    System.out.println("sound effect on");
+                    Chessboard.setSoundEffectOn(true);
+                }else{
+                    System.out.println("sound effect off");
+                    Chessboard.setSoundEffectOn(false);
+                }
             }
         });
+        //theme actionListeners
         chesscomThemeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                System.out.println("Chess.com Theme");
+                ChessComponent.setTheme(0);
+            }
+        });
+        demoThemeRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Demo Theme");
+                ChessComponent.setTheme(1);
+            }
+        });
+        //animation mode buttons action listeners,将这几个radioButton加入到一个buttongroup,以保证单选
+        disabledRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(disabledRadioButton.isSelected()){
+                    System.out.println("Animation disabled");
+                    dragonTailRadioButton.setSelected(false);
+                    sneakAttackRadioButton.setSelected(false);
+                    ClickController.setAnimationMode(0);
+                }
+            }
+        });
+        dragonTailRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(dragonTailRadioButton.isSelected()){
+                    System.out.println("Dragon tail animation");
+                    disabledRadioButton.setSelected(false);
+                    sneakAttackRadioButton.setSelected(false);
+                    ClickController.setAnimationMode(1);
+                }
+            }
+        });
+        sneakAttackRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Sneak attack animation");
+                if(sneakAttackRadioButton.isSelected()){
+                    disabledRadioButton.setSelected(false);
+                    sneakAttackRadioButton.setSelected(false);
+                    ClickController.setAnimationMode(2);
+                }
             }
         });
     }
@@ -123,34 +182,34 @@ public class Welcome extends JFrame {
         sneakAttackRadioButton.setFont(new Font("Rockwell", Font.ITALIC, 25));
         menuButton.setFont(new Font("Rockwell", Font.BOLD, 20));
         //加入背景图片
-        settingsBackground.setSize(550,760);
+        settingsBackground.setSize(550, 760);
         settingsBackground.setIcon(new ImageIcon("images/SettingsBackground.png"));
-        settingsBackground.setLocation(0,0);
+        settingsBackground.setLocation(0, 0);
         //调整所有的Label
-        musicLabel.setLocation(70,50);
-        musicLabel.setSize(200,100);
-        themeLabel.setLocation(70,200);
-        themeLabel.setSize(200,100);
-        animationLabel.setLocation(70,350);
-        animationLabel.setSize(200,100);
+        musicLabel.setLocation(70, 50);
+        musicLabel.setSize(200, 100);
+        themeLabel.setLocation(70, 200);
+        themeLabel.setSize(200, 100);
+        animationLabel.setLocation(70, 350);
+        animationLabel.setSize(200, 100);
         //调整所有的radioButton
-        bgmRadioButton.setLocation(80,125);
-        bgmRadioButton.setSize(250,50);
-        fxRadioButton.setLocation(80,175);
-        fxRadioButton.setSize(250,50);
-        chesscomThemeButton.setLocation(80,250+25);
-        chesscomThemeButton.setSize(250,50);
-        demoThemeRadioButton.setLocation(80,300+25);
-        demoThemeRadioButton.setSize(250,50);
-        disabledRadioButton.setLocation(80,400+25);
-        disabledRadioButton.setSize(250,50);
-        dragonTailRadioButton.setLocation(80,450+25);
-        dragonTailRadioButton.setSize(250,50);
-        sneakAttackRadioButton.setLocation(80,500+25);
-        sneakAttackRadioButton.setSize(250,50);
+        bgmRadioButton.setLocation(80, 125);
+        bgmRadioButton.setSize(250, 50);
+        fxRadioButton.setLocation(80, 175);
+        fxRadioButton.setSize(250, 50);
+        chesscomThemeButton.setLocation(80, 250 + 25);
+        chesscomThemeButton.setSize(250, 50);
+        demoThemeRadioButton.setLocation(80, 300 + 25);
+        demoThemeRadioButton.setSize(250, 50);
+        disabledRadioButton.setLocation(80, 400 + 25);
+        disabledRadioButton.setSize(250, 50);
+        dragonTailRadioButton.setLocation(80, 450 + 25);
+        dragonTailRadioButton.setSize(250, 50);
+        sneakAttackRadioButton.setLocation(80, 500 + 25);
+        sneakAttackRadioButton.setSize(250, 50);
         //设置按钮位置
-        menuButton.setLocation(300,600);
-        menuButton.setSize(200,40);
+        menuButton.setLocation(300, 600);
+        menuButton.setSize(200, 40);
     }
 
 }
