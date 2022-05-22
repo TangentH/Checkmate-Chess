@@ -1,5 +1,7 @@
 package music;
 
+import view.Main;
+
 import java.io.File;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -41,7 +43,8 @@ public class Bgm extends Thread {
 //            e.printStackTrace();
         } finally {
             if (loop) {
-                Bgm bgm =  new Bgm();
+                Bgm bgm = new Bgm();
+                Main.bgm = bgm;
                 bgm.start();
             }
             /**循环播放，finally:在执行完try和catch后一定要执行的代码
