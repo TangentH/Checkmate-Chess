@@ -1,5 +1,6 @@
 package controller;
 
+import view.ChessGameFrame;
 import view.Chessboard;
 
 import java.io.IOException;
@@ -14,16 +15,32 @@ public class GameController {
         this.chessboard = chessboard;
     }
 
-    public List<String> loadGameFromFile(String path) {//List: 链表，当成arrayList使用即可
-        //TODO：这段代码的意思是？
+    //获取路径，并读档
+    public List<String> loadGameFromFile(String path) {
         try {
             List<String> chessData = Files.readAllLines(Path.of(path));
-            chessboard.loadGame(chessData);
-            return chessData;
+            if (chessboard.loadGame(chessData)){
+                System.out.println("Load game successfully!"); //TODO:存档成功/失败后，有窗口弹出提示
+                return chessData;
+            }else {
+                System.out.println("Load game failed!");
+                return null;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("Load game failed!");
         return null;
+    }
+
+    //获取路径，并存档
+    public void saveGameFromFile(String fileName) {
+        try {
+            ChessGameFrame.saveGame(fileName);
+            System.out.println("Save game successfully!");  //TODO:读档成功后，有窗口弹出提示
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
