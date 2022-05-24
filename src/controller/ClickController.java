@@ -73,6 +73,8 @@ public class ClickController {
                 }
                 clearValidMovements();
                 chessboard.repaint();
+                chessboard.saveStep();
+                System.out.println(chessboard.step);
             } else if (handleSecond(chessComponent)) {       //选取移动位置后的反应
                 //repaint in swap chess method.
                 first.setSelected(false);
@@ -87,6 +89,8 @@ public class ClickController {
                 if (checkmate()) { //检查是否被将军
                     System.out.println("--------------------Checkmate!------------------------");
                 }
+                chessboard.saveStep();
+                System.out.println(chessboard.step);
             } else if (chessComponent.getChessColor() == first.getChessColor()) {
                 //用于简化选取流程的语句：只要选了同一方的棋子且不是王车易位，就可以自动更换选取的棋子
                 clearValidMovements();

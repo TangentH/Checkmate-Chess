@@ -19,7 +19,7 @@ public class ChessGameFrame extends JFrame {
     private final int HEIGTH;
     public final int CHESSBOARD_SIZE;
     private GameController gameController;//TODO:这个对象是用于导入外部文件的
-    private Chessboard chessboard;
+    public static Chessboard chessboard;
     private JLabel colorLabel;
     public JButton wRook, wQueen, wBishop, wKnight, bRook, bQueen, bBishop, bKnight;//用于兵底线升变的按钮
     private JLabel background;
@@ -46,6 +46,8 @@ public class ChessGameFrame extends JFrame {
         addRestartButton();
         addBackButton();
         addSaveButton();
+        addUndoButton();
+        addTodoButton();
         addBackgroundPic();
     }
 
@@ -74,10 +76,10 @@ public class ChessGameFrame extends JFrame {
     private void addLabel() {
         JLabel statusLabel = new JLabel("Current Player");
         colorLabel = new JLabel("WHITE");
-        statusLabel.setLocation(HEIGTH - 30-20, 70);//通过窗体的高度计算出来的位置
+        statusLabel.setLocation(HEIGTH - 30, 70);//通过窗体的高度计算出来的位置
         statusLabel.setSize(500, 80);//文本框的大小
         statusLabel.setFont(new Font("Rockwell", Font.BOLD, 30));//宋体楷体都能用
-        colorLabel.setLocation(HEIGTH + 25-20, 100);//通过窗体的高度计算出来的位置
+        colorLabel.setLocation(HEIGTH + 25, 100);//通过窗体的高度计算出来的位置
         colorLabel.setSize(500, 80);//文本框的大小
         colorLabel.setFont(new Font("Rockwell", Font.BOLD, 30));//宋体楷体都能用
         add(statusLabel);//把label添加到调用对象中
@@ -88,23 +90,23 @@ public class ChessGameFrame extends JFrame {
      * 在游戏面板中增加一个按钮，如果按下的话就会显示Hello, world!
      */
 
-    private void addHelloButton() {
-        JButton button = new JButton("Show Hello Here");
-        button.addActionListener((e) -> {
-            System.out.println("Button clicked");
-            JOptionPane.showMessageDialog(this, "Hello, world!");
-            System.out.println("Hello");
-        });  //TODO
-        //nambda表达式，点击这个button后要执行的效果
-        button.setLocation(HEIGTH, HEIGTH / 10 + 120);
-        button.setSize(200, 60);
-        button.setFont(new Font("Rockwell", Font.BOLD, 20));
-        add(button);
-    }
+//    private void addHelloButton() {
+//        JButton button = new JButton("Show Hello Here");
+//        button.addActionListener((e) -> {
+//            System.out.println("Button clicked");
+//            JOptionPane.showMessageDialog(this, "Hello, world!");
+//            System.out.println("Hello");
+//        });  //TODO
+//        //nambda表达式，点击这个button后要执行的效果
+//        button.setLocation(HEIGTH, HEIGTH / 10 + 120);
+//        button.setSize(200, 60);
+//        button.setFont(new Font("Rockwell", Font.BOLD, 20));
+//        add(button);
+//    }
 
     private void addLoadButton() {
         JButton button = new JButton("Load");   //TODO
-        button.setLocation(HEIGTH, HEIGTH / 10 + 240);
+        button.setLocation(HEIGTH, HEIGTH / 10 + 260);
         button.setSize(200, 60);
         button.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(button);
@@ -163,36 +165,77 @@ public class ChessGameFrame extends JFrame {
         add(button);
 
         button.addActionListener(e -> {
-            try {
-                saveGame();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            System.out.println("Click save");
+            String path = JOptionPane.showInputDialog(this, "Input Path here");
+            gameController.saveGameFromFile(path);
         });
     }
 
     //存档
-    public void saveGame() throws IOException {
-        int n = 3;
-        File file = new File("resource\\save" + n + ".txt");
-        System.out.println(file.createNewFile());
-        System.out.println("-----------------------");
-        FileOutputStream fos = new FileOutputStream("resource\\save" + n + ".txt");  //创建文件输出流对象
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                fos.write(ChessComponent.chessComponents[i][j].getChessName());  //将棋盘转为字符写入文件
-            }
-            fos.write("\n".getBytes(StandardCharsets.UTF_8));  //换行符
+    public static void saveGame(String fileName) throws IOException {
+        if (fileName.equals("")) {  //如果输入的文件名为空，默认存入Game.txt文件
+            fileName = "Game";
         }
 
-        if (chessboard.getCurrentColor() == ChessColor.WHITE) {
-            fos.write("w".getBytes(StandardCharsets.UTF_8));  //行棋方为白方，写入w
-        } else {
-            fos.write("b".getBytes(StandardCharsets.UTF_8));  //行棋方为黑方，写入b
+        File file = new File("resource\\" + fileName +".txt");
+        if (!file.exists()) {  //如果文件不存在，新建一个文件
+            file.createNewFile();
+        }
+
+        FileOutputStream fos = new FileOutputStream("resource\\" + fileName +".txt");  //创建文件输出流对象
+
+        for (int i = 0; i < chessboard.step.size(); i++) {
+            for (int j = 0; j < 8; j++) {
+                for (int k = 0; k < 8; k++) {
+                    fos.write(chessboard.step.get(i).get(j).charAt(k));  //将棋盘转为字符写入文件
+                }
+                fos.write("\n".getBytes(StandardCharsets.UTF_8));  //换行符
+            }
+            fos.write(chessboard.step.get(i).get(8).getBytes(StandardCharsets.UTF_8));
+            fos.write("\n".getBytes(StandardCharsets.UTF_8));  //换行符
         }
 
         fos.close();  //释放资源
     }
+
+    // 反悔棋按钮
+    private void addUndoButton() {
+        JButton button = new JButton("Undo");
+        button.setLocation(HEIGTH, HEIGTH / 10 + 100);
+        button.setSize(200, 60);
+        button.setFont(new Font("Rockwell", Font.BOLD, 20));
+        add(button);
+
+        button.addActionListener(e -> {
+            System.out.println("Click Undo");
+
+            if (chessboard.step2.size() > 1){
+                chessboard.step2.remove(chessboard.step2.size() - 1);
+                chessboard.loadGame2(chessboard.step.get(chessboard.step2.size() - 1));
+            }
+
+        });
+    }
+
+    // 正悔棋按钮
+    private void addTodoButton() {
+        JButton button = new JButton("Todo");
+        button.setLocation(HEIGTH, HEIGTH / 10 + 180);
+        button.setSize(200, 60);
+        button.setFont(new Font("Rockwell", Font.BOLD, 20));
+        add(button);
+
+        button.addActionListener(e -> {
+            System.out.println("Click Todo");
+
+            if (chessboard.step2.size() < chessboard.step.size()){
+                chessboard.step2.add(chessboard.step.get(chessboard.step2.size()));
+                chessboard.loadGame2(chessboard.step.get(chessboard.step2.size() - 1));
+            }
+
+        });
+    }
+
 
     //TODO：添加白兵升变时候显示的按钮
     public void addWhitePromotionButtons() {
