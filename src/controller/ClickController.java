@@ -140,6 +140,7 @@ public class ClickController {
                         for (int l = 0; l < 8; l++) {
                             ChessComponent chess = ChessComponent.chessComponents[k][l];
                             if (!(chess instanceof EmptySlotComponent) && king.getChessColor() != chess.getChessColor() && chess.canMoveTo(ChessComponent.chessComponents, king.getChessboardPoint()) && chess.getChessColor() != getChessboard().getCurrentColor()) {
+                                ChessGameFrame.setInfoText("Checkmate!");
                                 return true; //再次遍历棋盘，找到能将王的棋子
                             }
                         }
@@ -147,6 +148,7 @@ public class ClickController {
                 }
             }
         }
+        ChessGameFrame.setInfoText("   No info.");
         return false;
     }
 

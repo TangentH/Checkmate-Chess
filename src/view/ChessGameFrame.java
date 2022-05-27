@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.jar.JarEntry;
 
 /**
  * 这个类表示游戏过程中的整个游戏界面，是一切的载体
@@ -23,6 +24,17 @@ public class ChessGameFrame extends JFrame {
     private JLabel colorLabel;
     public JButton wRook, wQueen, wBishop, wKnight, bRook, bQueen, bBishop, bKnight;//用于兵底线升变的按钮
     private JLabel background;
+    private static JLabel info;
+
+    public static void setInfoText(String infoText) {
+        if (!infoText.equals("   No info.")) {
+            info.setText(infoText);
+            info.setEnabled(true);
+        }else{
+            info.setText(infoText);
+            info.setEnabled(false);
+        }
+    }
 
     public ChessGameFrame(int width, int height) {
         this.setResizable(false);
@@ -48,9 +60,22 @@ public class ChessGameFrame extends JFrame {
         addSaveButton();
         addUndoButton();
         addTodoButton();
+        addInfoLabel();
         addBackgroundPic();
     }
 
+
+    private void addInfoLabel() {
+        info = new JLabel("   No info.");
+        info.setSize(500, 600);
+//        info.setBounds(500,100,300,300);
+        info.setLocation(800 + 20-30, 100 - 30);
+        info.setFont(new Font("Rockwell", Font.BOLD, 30));
+        info.setEnabled(false);
+        info.setVerticalTextPosition(JLabel.CENTER);
+        info.setHorizontalTextPosition(JLabel.CENTER);//位置居中
+        add(info);
+    }
 
     private void addBackgroundPic() {
         background = new JLabel();
@@ -204,14 +229,16 @@ public class ChessGameFrame extends JFrame {
 
         fos.close();  //释放资源
     }
-//用于悔棋过程中更改colorLabel的字段
-    private void swapColorLabel(){
-        if(colorLabel.getText().equals("WHITE")){
+
+    //用于悔棋过程中更改colorLabel的字段
+    private void swapColorLabel() {
+        if (colorLabel.getText().equals("WHITE")) {
             colorLabel.setText("BLACK");
-        }else{
+        } else {
             colorLabel.setText("WHITE");
         }
     }
+
     // 反悔棋按钮
     private void addUndoButton() {
         JButton button = new JButton("<");
