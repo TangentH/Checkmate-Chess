@@ -107,28 +107,6 @@ public class ClickController {
         }
     }
 
-    //存档
-    public void saveGame() throws IOException {
-        File file = new File("resource\\save2.txt");
-        System.out.println(file.createNewFile());
-        System.out.println("-----------------------");
-        FileOutputStream fos = new FileOutputStream("resource\\save2.txt");  //创建文件输出流对象
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                fos.write(ChessComponent.chessComponents[i][j].getChessName()); //将棋盘转为字符写入文件
-            }
-            fos.write("\n".getBytes(StandardCharsets.UTF_8));  //换行符
-        }
-
-//        if (currentColor == ChessColor.WHITE){
-//            fos.write("w".getBytes(StandardCharsets.UTF_8)); //行棋方为白方，写入w
-//        }else{
-//            fos.write("b".getBytes(StandardCharsets.UTF_8)); //行棋方为黑方，写入b
-//        }
-        fos.write("w".getBytes(StandardCharsets.UTF_8));
-
-        fos.close(); //释放资源
-    }
 
     //判断是否被将军的方法
     public static boolean checkmate() {
