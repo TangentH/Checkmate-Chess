@@ -86,7 +86,7 @@ public class ClickController {
                 chessboard.swapColor();
                 first = null;//成功行棋后，自动将clickController的选定设为null
                 chessboard.repaint();
-                if (checkmate()) { //检查是否被将军
+                if (whiteCheckmate() || blackCheckmate()) { //检查是否被将军
                     System.out.println("--------------------Checkmate!------------------------");
                 }
                 chessboard.saveStep();
@@ -108,16 +108,17 @@ public class ClickController {
     }
 
 
-    //判断是否被将军的方法
-    public static boolean checkmate() {
+    //判断白方是否被将军的方法
+    public static boolean whiteCheckmate() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 ChessComponent king = ChessComponent.chessComponents[i][j]; //遍历棋盘，找到王
-                if (king instanceof KingChessComponent) {
+                if (king instanceof KingChessComponent && king.getChessColor() == ChessColor.WHITE) {
                     for (int k = 0; k < 8; k++) {
                         for (int l = 0; l < 8; l++) {
                             ChessComponent chess = ChessComponent.chessComponents[k][l];
                             if (!(chess instanceof EmptySlotComponent) && king.getChessColor() != chess.getChessColor() && chess.canMoveTo(ChessComponent.chessComponents, king.getChessboardPoint()) && chess.getChessColor() != getChessboard().getCurrentColor()) {
+                                ChessGameFrame.setInfoText("Checkmate!");
                                 return true; //再次遍历棋盘，找到能将王的棋子
                             }
                         }
@@ -125,7 +126,36 @@ public class ClickController {
                 }
             }
         }
+        ChessGameFrame.setInfoText("   No info.");
         return false;
+    }
+
+    //判断黑方是否被将军的方法
+    public static boolean blackCheckmate() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessComponent king = ChessComponent.chessComponents[i][j]; //遍历棋盘，找到王
+                if (king instanceof KingChessComponent && king.getChessColor() == ChessColor.BLACK) {
+                    for (int k = 0; k < 8; k++) {
+                        for (int l = 0; l < 8; l++) {
+                            ChessComponent chess = ChessComponent.chessComponents[k][l];
+                            if (!(chess instanceof EmptySlotComponent) && king.getChessColor() != chess.getChessColor() && chess.canMoveTo(ChessComponent.chessComponents, king.getChessboardPoint()) && chess.getChessColor() != getChessboard().getCurrentColor()) {
+                                ChessGameFrame.setInfoText("Checkmate!");
+                                return true; //再次遍历棋盘，找到能将王的棋子
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        ChessGameFrame.setInfoText("   No info.");
+        return false;
+    }
+
+    //以下为将死所用到的方法
+    //判断王是否可以逃跑
+    public static boolean canRun() {
+        return true;
     }
 
 

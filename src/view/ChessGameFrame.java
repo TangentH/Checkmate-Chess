@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.jar.JarEntry;
 
 /**
  * 这个类表示游戏过程中的整个游戏界面，是一切的载体
@@ -23,6 +24,17 @@ public class ChessGameFrame extends JFrame {
     private JLabel colorLabel;
     public JButton wRook, wQueen, wBishop, wKnight, bRook, bQueen, bBishop, bKnight;//用于兵底线升变的按钮
     private JLabel background;
+    private static JLabel info;
+
+    public static void setInfoText(String infoText) {
+        if (!infoText.equals("   No info.")) {
+            info.setText(infoText);
+            info.setEnabled(true);
+        }else{
+            info.setText(infoText);
+            info.setEnabled(false);
+        }
+    }
 
     public ChessGameFrame(int width, int height) {
         this.setResizable(false);
@@ -48,15 +60,28 @@ public class ChessGameFrame extends JFrame {
         addSaveButton();
         addUndoButton();
         addTodoButton();
+        addInfoLabel();
         addBackgroundPic();
     }
 
 
+    private void addInfoLabel() {
+        info = new JLabel("   No info.");
+        info.setSize(500, 600);
+//        info.setBounds(500,100,300,300);
+        info.setLocation(800 + 20-30, 100 - 30);
+        info.setFont(new Font("Rockwell", Font.BOLD, 30));
+        info.setEnabled(false);
+        info.setVerticalTextPosition(JLabel.CENTER);
+        info.setHorizontalTextPosition(JLabel.CENTER);//位置居中
+        add(info);
+    }
+
     private void addBackgroundPic() {
         background = new JLabel();
-        background.setSize(1050,820);
-        background.setIcon(new ImageIcon("images/Background1.png"));
-        background.setLocation(0,0);
+        background.setSize(1050, 794);
+        background.setIcon(new ImageIcon("images/Background2.png"));
+        background.setLocation(-10, -10);
         add(background);
     }
 
@@ -76,10 +101,10 @@ public class ChessGameFrame extends JFrame {
     private void addLabel() {
         JLabel statusLabel = new JLabel("Current Player");
         colorLabel = new JLabel("WHITE");
-        statusLabel.setLocation(HEIGTH - 30, 70);//通过窗体的高度计算出来的位置
+        statusLabel.setLocation(HEIGTH - 30 - 20, 70);//通过窗体的高度计算出来的位置
         statusLabel.setSize(500, 80);//文本框的大小
         statusLabel.setFont(new Font("Rockwell", Font.BOLD, 30));//宋体楷体都能用
-        colorLabel.setLocation(HEIGTH + 25, 100);//通过窗体的高度计算出来的位置
+        colorLabel.setLocation(HEIGTH + 5, 100);//通过窗体的高度计算出来的位置
         colorLabel.setSize(500, 80);//文本框的大小
         colorLabel.setFont(new Font("Rockwell", Font.BOLD, 30));//宋体楷体都能用
         add(statusLabel);//把label添加到调用对象中
@@ -103,53 +128,69 @@ public class ChessGameFrame extends JFrame {
 //        button.setFont(new Font("Rockwell", Font.BOLD, 20));
 //        add(button);
 //    }
-
     private void addLoadButton() {
+        JFileChooser chooser = new JFileChooser("./resource");
         JButton button = new JButton("Load");   //TODO
-        button.setLocation(HEIGTH, HEIGTH / 10 + 260);
-        button.setSize(200, 60);
+        button.setLocation(750, 530);
+        button.setSize(120, 50);
         button.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(button);
+        button.setBackground(new Color(149, 195, 230, 255));
 
-        button.addActionListener(e -> { //TODO：了解actionListener如何使用
+        button.addActionListener(e -> {
             System.out.println("Click load");
-            String path = JOptionPane.showInputDialog(this, "Input Path here");
-            gameController.loadGameFromFile(path);
+            int s = chooser.showOpenDialog(this);
+            if (s == JFileChooser.APPROVE_OPTION){
+                File file = chooser.getSelectedFile();
+                if (file.getName().endsWith(".txt")){
+                    gameController.loadGameFromFile(file.getAbsolutePath());
+                }else {
+                    System.out.println("Load game failed!"); //TODO:文件格式错误，弹窗提示
+                    JOptionPane.showMessageDialog(Chessboard.chessGameFrame, "Invalid file format!");
+                }
+            }
+
         });
     }
 
     private void addRestartButton() {
-        JButton button = new JButton("Restart");
-        button.setLocation(HEIGTH, HEIGTH / 10 + 360);
-        button.setSize(200, 60);
+        JButton button = new JButton("+");
+        button.setLocation(800 + 50, 500 + 100);
+        button.setSize(47, 47);
         button.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(button);
+        button.setBackground(new Color(149, 195, 230, 255));
+
 
         button.addActionListener(e -> { //TODO：了解actionListener如何使用
-            System.out.println("Click Restart");
-            remove(chessboard);
-            remove(background);//背景图片也需要重新加载
-            addChessboard();
-            addBackgroundPic();
-            this.repaint();
-            colorLabel.setText("WHITE");
-            //如果在升变过程中遇到了restart，要将升变按钮删除
-            if (wRook != null) {
-                removeWhitePromotionButtons();
+            int result = JOptionPane.showConfirmDialog(this, "Confirm to restart?");
+            if (result == 0) {//点击了确认按钮
+                System.out.println("Click Restart");
+                remove(chessboard);
+                remove(background);//背景图片也需要重新加载
+                addChessboard();
+                addBackgroundPic();
+                this.repaint();
+                colorLabel.setText("WHITE");
+                //如果在升变过程中遇到了restart，要将升变按钮删除
+                if (wRook != null) {
+                    removeWhitePromotionButtons();
+                }
+                if (bRook != null) {
+                    removeBlackPromotionButtons();
+                }
+                JOptionPane.showMessageDialog(this, "Restart Successfully!");
             }
-            if (bRook != null) {
-                removeBlackPromotionButtons();
-            }
-            JOptionPane.showMessageDialog(this, "Restart Successfully!");
         });
     }
 
     private void addBackButton() {
-        JButton button = new JButton("Back");
-        button.setLocation(HEIGTH, HEIGTH / 10 + 480);
-        button.setSize(200, 60);
+        JButton button = new JButton("Menu");
+        button.setLocation(800 + 100, 500 + 100);
+        button.setSize(100, 47);
         button.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(button);
+        button.setBackground(new Color(149, 195, 230, 255));
 
         button.addActionListener(e -> {
             this.setVisible(false);
@@ -159,10 +200,11 @@ public class ChessGameFrame extends JFrame {
 
     private void addSaveButton() {
         JButton button = new JButton("Save");
-        button.setLocation(HEIGTH, HEIGTH / 10 + 580);
-        button.setSize(200, 60);
+        button.setLocation(750 + 125 + 5, 530);
+        button.setSize(120, 50);
         button.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(button);
+        button.setBackground(new Color(149, 195, 230, 255));
 
         button.addActionListener(e -> {
             System.out.println("Click save");
@@ -177,12 +219,12 @@ public class ChessGameFrame extends JFrame {
             fileName = "Game";
         }
 
-        File file = new File("resource\\" + fileName +".txt");
+        File file = new File("resource\\" + fileName + ".txt");
         if (!file.exists()) {  //如果文件不存在，新建一个文件
             file.createNewFile();
         }
 
-        FileOutputStream fos = new FileOutputStream("resource\\" + fileName +".txt");  //创建文件输出流对象
+        FileOutputStream fos = new FileOutputStream("resource\\" + fileName + ".txt");  //创建文件输出流对象
 
         for (int i = 0; i < chessboard.step.size(); i++) {
             for (int j = 0; j < 8; j++) {
@@ -198,40 +240,53 @@ public class ChessGameFrame extends JFrame {
         fos.close();  //释放资源
     }
 
+    //用于悔棋过程中更改colorLabel的字段
+    private void swapColorLabel() {
+        if (colorLabel.getText().equals("WHITE")) {
+            colorLabel.setText("BLACK");
+        } else {
+            colorLabel.setText("WHITE");
+        }
+    }
+
     // 反悔棋按钮
     private void addUndoButton() {
-        JButton button = new JButton("Undo");
-        button.setLocation(HEIGTH, HEIGTH / 10 + 100);
-        button.setSize(200, 60);
+        JButton button = new JButton("<");
+        button.setLocation(800 - 50, 500 + 100);
+        button.setSize(47, 47);
         button.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(button);
+        button.setBackground(new Color(149, 195, 230, 255));
 
         button.addActionListener(e -> {
             System.out.println("Click Undo");
 
-            if (chessboard.step2.size() > 1){
+            if (chessboard.step2.size() > 1) {
                 chessboard.step2.remove(chessboard.step2.size() - 1);
-                chessboard.loadGame2(chessboard.step.get(chessboard.step2.size() - 1));
+                chessboard.loadGame2(chessboard.step2.get(chessboard.step2.size() - 1));
             }
+
 
         });
     }
 
     // 正悔棋按钮
     private void addTodoButton() {
-        JButton button = new JButton("Todo");
-        button.setLocation(HEIGTH, HEIGTH / 10 + 180);
-        button.setSize(200, 60);
+        JButton button = new JButton(">");
+        button.setLocation(800, 500 + 100);
+        button.setSize(47, 47);
         button.setFont(new Font("Rockwell", Font.BOLD, 20));
         add(button);
+        button.setBackground(new Color(149, 195, 230, 255));
 
         button.addActionListener(e -> {
             System.out.println("Click Todo");
 
-            if (chessboard.step2.size() < chessboard.step.size()){
+            if (chessboard.step2.size() < chessboard.step.size()) {
                 chessboard.step2.add(chessboard.step.get(chessboard.step2.size()));
                 chessboard.loadGame2(chessboard.step.get(chessboard.step2.size() - 1));
             }
+
 
         });
     }

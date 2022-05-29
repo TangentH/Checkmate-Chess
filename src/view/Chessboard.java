@@ -340,8 +340,6 @@ public class Chessboard extends JComponent {
         chessData.forEach(System.out::println);
 
         //非法检测
-        //TODO:检测文件格式是否为txt
-        //TODO：读档时使用JFileChooser
         if (chessData.size() % 9 == 0) {
             for (int i = 0; i < chessData.size()/9 ; i++) {
                 for (int j = i * 9; j < 8 + i * 9; j++) {
@@ -397,8 +395,10 @@ public class Chessboard extends JComponent {
 
             if (chessData.get(chessData.size() - 1).equals("w")) {
                 currentColor = ChessColor.WHITE;
+                colorLabel.setText("WHITE");
             } else {
                 currentColor = ChessColor.BLACK;
+                colorLabel.setText("BLACK");
             }
             return true;
         }
@@ -489,8 +489,10 @@ public class Chessboard extends JComponent {
 
             if (chessData.get(8).equals("w")) {
                 currentColor = ChessColor.WHITE;
+                colorLabel.setText("WHITE");
             } else {
                 currentColor = ChessColor.BLACK;
+                colorLabel.setText("BLACK");
             }
         }
     }
