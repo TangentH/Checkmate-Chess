@@ -30,7 +30,7 @@ public class GameController {
                 return null;
             }
         } catch (IOException e) {
-//            e.printStackTrace();
+            e.printStackTrace();
         }
         System.out.println("Load game failed!");
         JOptionPane.showMessageDialog(Chessboard.chessGameFrame, "Load game failed!");

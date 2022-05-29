@@ -1,5 +1,6 @@
 package view;
 
+import controller.ClickController;
 import controller.GameController;
 import model.*;
 
@@ -255,6 +256,7 @@ public class ChessGameFrame extends JFrame {
                 chessboard.step2.remove(chessboard.step2.size() - 1);
                 chessboard.loadGame2(chessboard.step.get(chessboard.step2.size() - 1));
                 swapColorLabel();
+                ClickController.checkmate();
             }
 
 
