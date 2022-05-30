@@ -1,5 +1,6 @@
 package view;
 
+import controller.ClickController;
 import controller.GameController;
 import model.*;
 
@@ -264,6 +265,7 @@ public class ChessGameFrame extends JFrame {
             if (chessboard.step2.size() > 1) {
                 chessboard.step2.remove(chessboard.step2.size() - 1);
                 chessboard.loadGame2(chessboard.step2.get(chessboard.step2.size() - 1));
+                ClickController.check();
             }
 
 
