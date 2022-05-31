@@ -26,12 +26,29 @@ public class ChessGameFrame extends JFrame {
     public JButton wRook, wQueen, wBishop, wKnight, bRook, bQueen, bBishop, bKnight;//用于兵底线升变的按钮
     private JLabel background;
     private static JLabel info;
+    private static int status = 0;
+    //status表示棋局状态，0表示棋局未结束，1表示黑方赢，2表示白方赢,3表示正在回放
+    public JButton playback;
+
+    //回放按钮
+    public static int getStatus() {
+        return status;
+    }
+
+    public static void setStatus(int status) {
+        ChessGameFrame.status = status;
+    }
 
     public static void setInfoText(String infoText) {
         if (!infoText.equals("   No info.")) {
+            if (infoText.equals("   Check!")) {
+                info.setForeground(Color.red);
+            } else {
+                info.setForeground(Color.BLACK);
+            }
             info.setText(infoText);
             info.setEnabled(true);
-        }else{
+        } else {
             info.setText(infoText);
             info.setEnabled(false);
         }
@@ -61,16 +78,32 @@ public class ChessGameFrame extends JFrame {
         addSaveButton();
         addUndoButton();
         addTodoButton();
+        addPlaybackButton();
         addInfoLabel();
         addBackgroundPic();
     }
 
 
+    private void addPlaybackButton() {
+        playback = new JButton("Play Back");
+        playback.setLocation(800 + 10, 100 + 350);
+        playback.setSize(130, 40);
+        playback.setFont(new Font("Rockwell", Font.BOLD, 17));
+        add(playback);
+        playback.setBackground(new Color(149, 195, 230, 255));
+        playback.setVisible(false);//默认状态下看不见这个按钮
+        playback.addActionListener(e -> {
+            System.out.println("Click Play Back");
+            //TODO:回到最先存入的棋盘
+            setStatus(3);
+        });
+    }
+
     private void addInfoLabel() {
         info = new JLabel("   No info.");
         info.setSize(500, 600);
 //        info.setBounds(500,100,300,300);
-        info.setLocation(800 + 20-30, 100 - 30);
+        info.setLocation(800 + 20 - 30, 100 - 30);
         info.setFont(new Font("Rockwell", Font.BOLD, 30));
         info.setEnabled(false);
         info.setVerticalTextPosition(JLabel.CENTER);
@@ -141,11 +174,11 @@ public class ChessGameFrame extends JFrame {
         button.addActionListener(e -> {
             System.out.println("Click load");
             int s = chooser.showOpenDialog(this);
-            if (s == JFileChooser.APPROVE_OPTION){
+            if (s == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
-                if (file.getName().endsWith(".txt")){
+                if (file.getName().endsWith(".txt")) {
                     gameController.loadGameFromFile(file.getAbsolutePath());
-                }else {
+                } else {
                     System.out.println("Load game failed!"); //TODO:文件格式错误，弹窗提示
                     JOptionPane.showMessageDialog(Chessboard.chessGameFrame, "Invalid file format!");
                 }
@@ -173,6 +206,9 @@ public class ChessGameFrame extends JFrame {
                 addBackgroundPic();
                 this.repaint();
                 colorLabel.setText("WHITE");
+                status = 0;//恢复到正在行棋的状况
+                playback.setVisible(false);
+                setInfoText("   No info.");
                 //如果在升变过程中遇到了restart，要将升变按钮删除
                 if (wRook != null) {
                     removeWhitePromotionButtons();
@@ -196,6 +232,7 @@ public class ChessGameFrame extends JFrame {
         button.addActionListener(e -> {
             this.setVisible(false);
             Main.welcomeFrame.setVisible(true);
+            status = 0;
         });
     }
 
@@ -209,7 +246,7 @@ public class ChessGameFrame extends JFrame {
 
         button.addActionListener(e -> {
             System.out.println("Click save");
-            String path = JOptionPane.showInputDialog(this, "Input Path here");
+            String path = JOptionPane.showInputDialog(this, "Input Name here");
             gameController.saveGameFromFile(path);
         });
     }

@@ -59,6 +59,9 @@ public abstract class ChessComponent extends JComponent {
     protected static int theme = 0;
     //theme=0:chess.com Theme, theme=1: Demo theme
 
+    private static Color BLACK_WIN = new Color(0, 0, 0, 100);
+    private static Color WHITE_WIN = new Color(255, 255, 255, 100);
+
     public static int getTheme() {
         return theme;
     }
@@ -82,7 +85,7 @@ public abstract class ChessComponent extends JComponent {
         }
         if (getTheme() == 1) {
             BACKGROUND_COLORS[1] = new Color(29, 74, 107, 230);
-            BACKGROUND_COLORS[0] = new Color(255,255,255,230);
+            BACKGROUND_COLORS[0] = new Color(255, 255, 255, 230);
         }
     }
 
@@ -176,7 +179,8 @@ public abstract class ChessComponent extends JComponent {
     protected void processMouseEvent(MouseEvent e) {
         super.processMouseEvent(e);
 //TODO:鼠标划过棋盘格的方法在这里写
-        if (e.getID() == MouseEvent.MOUSE_PRESSED && chessGameFrame.wRook == null && chessGameFrame.bRook == null) {
+        //只有在胜负还没有分出的时候可以走子
+        if (e.getID() == MouseEvent.MOUSE_PRESSED && chessGameFrame.wRook == null && chessGameFrame.bRook == null && ChessGameFrame.getStatus() == 0) {
             //TODO:只有不存在升变按钮时，才可以正常下棋，只检查双方的其中一个升变按钮
             System.out.printf("Click [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
             try {
@@ -185,7 +189,7 @@ public abstract class ChessComponent extends JComponent {
                 ex.printStackTrace();
             }
         }
-        if (e.getID() == MouseEvent.MOUSE_ENTERED && chessGameFrame.wRook == null && chessGameFrame.bRook == null) {
+        if (e.getID() == MouseEvent.MOUSE_ENTERED && chessGameFrame.wRook == null && chessGameFrame.bRook == null && ChessGameFrame.getStatus() == 0) {
             //鼠标移入
             System.out.printf("Mouse On [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
             if (!(this instanceof EmptySlotComponent) && getChessboard().getCurrentColor() == this.getChessColor()) {
@@ -222,13 +226,16 @@ public abstract class ChessComponent extends JComponent {
     protected void paintComponent(Graphics g) {//TODO:此处包含了黑白棋盘格的绘制,每次调用repaint()方法时都会自动调用这个重写的方法，这个方法本身不需要自己来调用
         super.paintComponents(g);
         System.out.printf("repaint chess [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
-        if (isMouseOn) {
+        if (isMouseOn && ChessGameFrame.getStatus() == 0) {
             //当鼠标移动到棋子上时
             squareColor = mouseOn;
-        } else {
+        } else if (ChessGameFrame.getStatus() == 0 ||ChessGameFrame.getStatus() == 3) {
             squareColor = BACKGROUND_COLORS[(chessboardPoint.getX() + chessboardPoint.getY()) % 2];
+            //通过计算当前位置，确定棋盘格的颜色
+        } else {
+            squareColor = (ChessGameFrame.getStatus() == 1) ? BLACK_WIN : WHITE_WIN;
+            //胜负判定后用于统一棋盘格颜色
         }
-        //通过计算当前位置，确定棋盘格的颜色
         g.setColor(squareColor);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
     }

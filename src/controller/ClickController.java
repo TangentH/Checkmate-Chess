@@ -89,17 +89,23 @@ public class ClickController {
                 chessboard.repaint();
                 //检查是否被将军,以及将死
                 if (check() != ChessColor.NONE) { //将军
-                    if (check() == ChessColor.WHITE){  //如果白方被将军
-                        if (!(intercept(ChessColor.WHITE) || run(ChessColor.WHITE) || capture(ChessColor.WHITE))){  //被将死
+                    if (check() == ChessColor.WHITE) {  //如果白方被将军
+                        if (!(intercept(ChessColor.WHITE) || run(ChessColor.WHITE) || capture(ChessColor.WHITE))) {  //被将死
                             ChessGameFrame.setInfoText("BLACK WIN!");  //TODO：结束游戏
-                        }else {  //没被将死
+                            ChessGameFrame.setStatus(1);
+                            paintVictoryGrid();
+                            Chessboard.chessGameFrame.playback.setVisible(true);
+                        } else {  //没被将死
                             ChessGameFrame.setInfoText("   Check!");
                         }
-                    }else{  //如果黑方被将军
-                        if (!(intercept(ChessColor.BLACK) || run(ChessColor.BLACK) || capture(ChessColor.BLACK))){  //被将死
+                    } else {  //如果黑方被将军
+                        if (!(intercept(ChessColor.BLACK) || run(ChessColor.BLACK) || capture(ChessColor.BLACK))) {  //被将死
                             ChessGameFrame.setInfoText("WHITE WIN!");  //TODO：结束游戏
-                        }else{  //没被将死
-                            ChessGameFrame.setInfoText("    Check!");
+                            ChessGameFrame.setStatus(2);
+                            paintVictoryGrid();
+                            Chessboard.chessGameFrame.playback.setVisible(true);
+                        } else {  //没被将死
+                            ChessGameFrame.setInfoText("   Check!");
                         }
                     }
                 }
@@ -121,6 +127,15 @@ public class ClickController {
     }
 
 
+    public static void paintVictoryGrid() throws InterruptedException {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessComponent.chessComponents[i][j].paintImmediately(0,0,76,76);
+                Thread.sleep(10);
+            }
+        }
+    }
+
     //判断是否被将军（未被将军返回null）
     public static ChessColor check() {
         for (int i = 0; i < 8; i++) {
@@ -135,7 +150,7 @@ public class ClickController {
                             }
                         }
                     }
-                }else if (king instanceof KingChessComponent && king.getChessColor() == ChessColor.BLACK){  //判断是否为黑王
+                } else if (king instanceof KingChessComponent && king.getChessColor() == ChessColor.BLACK) {  //判断是否为黑王
                     for (int k = 0; k < 8; k++) {
                         for (int l = 0; l < 8; l++) {  //再次遍历棋盘，找到能吃王的棋子
                             ChessComponent chess = ChessComponent.chessComponents[k][l];
@@ -154,14 +169,14 @@ public class ClickController {
 
     //以下为将死所用到的方法
     //判断是否可以避将(不考虑吃过路兵)
-    public boolean run (ChessColor kingColor) {  //传入王的颜色
+    public boolean run(ChessColor kingColor) {  //传入王的颜色
         int X = 0;
         int Y = 0;
 
         for (int i = 0; i < 8; i++) {  //遍历棋盘找到被将军的王
             for (int j = 0; j < 8; j++) {
                 ChessComponent king = ChessComponent.chessComponents[i][j]; //遍历棋盘，找到王
-                if (king instanceof KingChessComponent && king.getChessColor() == kingColor){
+                if (king instanceof KingChessComponent && king.getChessColor() == kingColor) {
                     X = i;
                     Y = j;
                     break;
@@ -169,7 +184,7 @@ public class ClickController {
             }
         }
 
-        if (getChessboard().getCurrentColor() == kingColor){  //判断当前行棋方是否与被将的王相同(因为可能出现送将的情况)
+        if (getChessboard().getCurrentColor() == kingColor) {  //判断当前行棋方是否与被将的王相同(因为可能出现送将的情况)
             ChessComponent king = ChessComponent.chessComponents[X][Y];
             ChessboardPoint kPoint = king.getChessboardPoint();
             Point kLocation = king.getLocation();
@@ -179,7 +194,7 @@ public class ClickController {
                     ChessComponent chess = ChessComponent.chessComponents[i][j];
                     ChessboardPoint cPoint = chess.getChessboardPoint();
                     Point cLocation = chess.getLocation();
-                    if (kingColor != chess.getChessColor() && king.canMoveTo(ChessComponent.chessComponents, chess.getChessboardPoint())){ //遍历棋盘，找到被将的王能走的位置
+                    if (kingColor != chess.getChessColor() && king.canMoveTo(ChessComponent.chessComponents, chess.getChessboardPoint())) { //遍历棋盘，找到被将的王能走的位置
                         //自动走棋，判断交换位置后，是否还会继续被将军
                         chessboard.remove(ChessComponent.chessComponents[i][j]);
                         chessboard.remove(ChessComponent.chessComponents[X][Y]);
@@ -196,7 +211,7 @@ public class ClickController {
                             ChessComponent.chessComponents[i][j] = chess;
                             chessboard.add(ChessComponent.chessComponents[i][j]);
                             chessboard.add(ChessComponent.chessComponents[X][Y]);
-                        }else {  //不会被将军，避将成功
+                        } else {  //不会被将军，避将成功
                             chessboard.remove(ChessComponent.chessComponents[i][j]);
                             chessboard.remove(ChessComponent.chessComponents[X][Y]);
                             ChessComponent.chessComponents[X][Y] = king;
@@ -214,7 +229,7 @@ public class ClickController {
 
 
     //找出有几个棋子将军王的函数（如果有两个及以上棋子将军王，则王无法消将和垫将）
-    public static ArrayList<ChessComponent> checkingPieces(ChessColor kingColor){
+    public static ArrayList<ChessComponent> checkingPieces(ChessColor kingColor) {
         ArrayList<ChessComponent> list = new ArrayList<>();
 
         for (int i = 0; i < 8; i++) {
@@ -238,16 +253,16 @@ public class ClickController {
 
 
     //判断是否可以消将(不考虑吃过路兵)
-    public boolean capture(ChessColor kingColor){
-        if (checkingPieces(kingColor).size() > 1){  //王不能同时被多个棋子将军
+    public boolean capture(ChessColor kingColor) {
+        if (checkingPieces(kingColor).size() > 1) {  //王不能同时被多个棋子将军
             return false;
-        }else if (checkingPieces(kingColor).size() == 1){
+        } else if (checkingPieces(kingColor).size() == 1) {
             ChessComponent checkChess = checkingPieces(kingColor).get(0);  //对方将军的棋子
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     ChessComponent chess = ChessComponent.chessComponents[i][j];
                     if (!(chess instanceof EmptySlotComponent) && !(chess instanceof KingChessComponent) && chess.getChessColor() == kingColor
-                            && chess.getChessColor() == getChessboard().getCurrentColor() && chess.canMoveTo(ChessComponent.chessComponents, checkChess.getChessboardPoint())){
+                            && chess.getChessColor() == getChessboard().getCurrentColor() && chess.canMoveTo(ChessComponent.chessComponents, checkChess.getChessboardPoint())) {
                         return true;
                     }
                 }
@@ -258,12 +273,12 @@ public class ClickController {
     }
 
     //判断是否可以垫将
-    public boolean intercept(ChessColor kingColor){
-        if (checkingPieces(kingColor).size() > 1){  //王不能同时被多个棋子将军
+    public boolean intercept(ChessColor kingColor) {
+        if (checkingPieces(kingColor).size() > 1) {  //王不能同时被多个棋子将军
             return false;
-        }else if (checkingPieces(kingColor).size() == 1){
+        } else if (checkingPieces(kingColor).size() == 1) {
             ChessComponent checkChess = checkingPieces(kingColor).get(0);  //对方将军的棋子
-            if (checkChess instanceof KingChessComponent || checkChess instanceof KnightChessComponent || checkChess instanceof PawnChessComponent || kingColor != getChessboard().getCurrentColor()){  //如果将军的棋子是马、兵、王，不能垫将
+            if (checkChess instanceof KingChessComponent || checkChess instanceof KnightChessComponent || checkChess instanceof PawnChessComponent || kingColor != getChessboard().getCurrentColor()) {  //如果将军的棋子是马、兵、王，不能垫将
                 return false;
             }
             int X = 0;
@@ -271,46 +286,46 @@ public class ClickController {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {  //找到被将军的王
                     ChessComponent king = ChessComponent.chessComponents[i][j];
-                    if (king instanceof KingChessComponent && king.getChessColor() == kingColor){
+                    if (king instanceof KingChessComponent && king.getChessColor() == kingColor) {
                         X = i;
                         Y = j;
                     }
                 }
             }
-            if (Math.abs(X - checkChess.getChessboardPoint().getX()) > 1 || Math.abs(Y - checkChess.getChessboardPoint().getY()) > 1 ){  //将军的棋子不能在被将军的王的九宫格范围内
-                if (X == checkChess.getChessboardPoint().getX()){  //考虑同一行的情况
+            if (Math.abs(X - checkChess.getChessboardPoint().getX()) > 1 || Math.abs(Y - checkChess.getChessboardPoint().getY()) > 1) {  //将军的棋子不能在被将军的王的九宫格范围内
+                if (X == checkChess.getChessboardPoint().getX()) {  //考虑同一行的情况
                     int c1 = Math.max(Y, checkChess.getChessboardPoint().getY());
                     int c2 = Math.min(Y, checkChess.getChessboardPoint().getY());
 
                     for (int i = 0; i < 8; i++) {
                         for (int j = 0; j < 8; j++) {  //遍历棋盘，找到能移动到该行垫将的棋子
                             ChessComponent chess = ChessComponent.chessComponents[i][j];
-                            if (!(chess instanceof EmptySlotComponent) && !(chess instanceof KingChessComponent) && chess.getChessColor() == kingColor){
+                            if (!(chess instanceof EmptySlotComponent) && !(chess instanceof KingChessComponent) && chess.getChessColor() == kingColor) {
                                 for (int k = c2 + 1; k < c1; k++) {
-                                    if (chess.canMoveTo(ChessComponent.chessComponents, chessComponents[X][k].getChessboardPoint())){
+                                    if (chess.canMoveTo(ChessComponent.chessComponents, chessComponents[X][k].getChessboardPoint())) {
                                         return true;
                                     }
                                 }
                             }
                         }
                     }
-                }else if (Y == checkChess.getChessboardPoint().getY()){  //考虑同一列的情况
+                } else if (Y == checkChess.getChessboardPoint().getY()) {  //考虑同一列的情况
                     int r1 = Math.max(X, checkChess.getChessboardPoint().getX());
                     int r2 = Math.min(X, checkChess.getChessboardPoint().getX());
 
                     for (int i = 0; i < 8; i++) {
                         for (int j = 0; j < 8; j++) {
                             ChessComponent chess = ChessComponent.chessComponents[i][j];
-                            if (!(chess instanceof EmptySlotComponent) && !(chess instanceof KingChessComponent) && chess.getChessColor() == kingColor){
+                            if (!(chess instanceof EmptySlotComponent) && !(chess instanceof KingChessComponent) && chess.getChessColor() == kingColor) {
                                 for (int k = r2 + 1; k < r1; k++) {
-                                    if (chess.canMoveTo(ChessComponent.chessComponents, chessComponents[k][Y].getChessboardPoint())){
+                                    if (chess.canMoveTo(ChessComponent.chessComponents, chessComponents[k][Y].getChessboardPoint())) {
                                         return true;
                                     }
                                 }
                             }
                         }
                     }
-                }else if (X + Y == checkChess.getChessboardPoint().getX() + checkChess.getChessboardPoint().getY() || X - Y == checkChess.getChessboardPoint().getX() - checkChess.getChessboardPoint().getY()){  //考虑同一对角线的情况
+                } else if (X + Y == checkChess.getChessboardPoint().getX() + checkChess.getChessboardPoint().getY() || X - Y == checkChess.getChessboardPoint().getX() - checkChess.getChessboardPoint().getY()) {  //考虑同一对角线的情况
                     int c1 = Math.max(Y, checkChess.getChessboardPoint().getY());
                     int c2 = Math.min(Y, checkChess.getChessboardPoint().getY());
                     int r1 = Math.max(X, checkChess.getChessboardPoint().getX());
@@ -319,10 +334,10 @@ public class ClickController {
                     for (int i = 0; i < 8; i++) {
                         for (int j = 0; j < 8; j++) {
                             ChessComponent chess = ChessComponent.chessComponents[i][j];
-                            if (!(chess instanceof EmptySlotComponent) && !(chess instanceof KingChessComponent) && chess.getChessColor() == kingColor){
-                                for (int k = c2 + 1; k < c1 ; k++) {
+                            if (!(chess instanceof EmptySlotComponent) && !(chess instanceof KingChessComponent) && chess.getChessColor() == kingColor) {
+                                for (int k = c2 + 1; k < c1; k++) {
                                     for (int l = r2 + 1; l < r1; l++) {
-                                        if ((X + Y == k + l || X - Y == l - k) && chess.canMoveTo(ChessComponent.chessComponents, chessComponents[l][k].getChessboardPoint())){
+                                        if ((X + Y == k + l || X - Y == l - k) && chess.canMoveTo(ChessComponent.chessComponents, chessComponents[l][k].getChessboardPoint())) {
                                             return true;
                                         }
                                     }
@@ -509,7 +524,7 @@ public class ClickController {
                 first.paintImmediately(0, 0, 76, 76);//神龙摆尾
             }
             //不能使用repaint,repaint好像不会立即被执行，是个多线程方法？
-            Thread.sleep(50 / n);//总时长为100毫秒
+            Thread.sleep(50 / n);//总时长为50毫秒
         }
         first.setLocation(firstX, firstY);
         //将第一个棋子的状态返回到初始状态，避免（可能）swapLocation出bug
