@@ -95,6 +95,8 @@ public class ChessGameFrame extends JFrame {
         playback.addActionListener(e -> {
             System.out.println("Click Play Back");
             //TODO:回到最先存入的棋盘
+            chessboard.step2.clear();
+            chessboard.loadGame2(chessboard.step.get(0));
             setStatus(3);
         });
     }
@@ -179,8 +181,8 @@ public class ChessGameFrame extends JFrame {
                 if (file.getName().endsWith(".txt")) {
                     gameController.loadGameFromFile(file.getAbsolutePath());
                 } else {
-                    System.out.println("Load game failed!"); //TODO:文件格式错误，弹窗提示
-                    JOptionPane.showMessageDialog(Chessboard.chessGameFrame, "Invalid file format!");
+                    System.out.println("Load game failed!");
+                    JOptionPane.showMessageDialog(Chessboard.chessGameFrame, "104: File format error!");
                 }
             }
 
@@ -323,7 +325,7 @@ public class ChessGameFrame extends JFrame {
 
             if (chessboard.step2.size() < chessboard.step.size()) {
                 chessboard.step2.add(chessboard.step.get(chessboard.step2.size()));
-                chessboard.loadGame2(chessboard.step.get(chessboard.step2.size() - 1));
+                chessboard.loadGame2(chessboard.step2.get(chessboard.step2.size() - 1));
             }
 
 

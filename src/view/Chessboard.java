@@ -340,69 +340,73 @@ public class Chessboard extends JComponent {
         chessData.forEach(System.out::println);
 
         //非法检测
-        if (chessData.size() % 9 == 0) {
-            for (int i = 0; i < chessData.size()/9 ; i++) {
-                for (int j = i * 9; j < 8 + i * 9; j++) {
-                    if (chessData.get(j).length() == 8) {
-                        for (int k = 0; k < 8; k++) {
-                            if (!(chessData.get(j).charAt(k) == 'b' || chessData.get(j).charAt(k) == 'B' || chessData.get(j).charAt(k) == 'k' || chessData.get(j).charAt(k) == 'K' || chessData.get(j).charAt(k) == 'q' || chessData.get(j).charAt(k) == 'n' || chessData.get(j).charAt(k) == 'N'
-                                    || chessData.get(j).charAt(k) == 'Q' || chessData.get(j).charAt(k) == 'p' || chessData.get(j).charAt(k) == 'P' || chessData.get(j).charAt(k) == 'r' || chessData.get(j).charAt(k) == 'R' || chessData.get(j).charAt(k) == '_')) {
-                                return false;
-                            }
+        if (chessData.size() % 9 != 0){
+            JOptionPane.showMessageDialog(chessGameFrame, "101: Chessboard size error!");
+            return false;
+        }
+
+        for (int i = 0; i < chessData.size()/9 ; i++) {
+            for (int j = i * 9; j < 8 + i * 9; j++) {
+                if (chessData.get(j).length() == 8) {
+                    for (int k = 0; k < 8; k++) {
+                        if (!(chessData.get(j).charAt(k) == 'b' || chessData.get(j).charAt(k) == 'B' || chessData.get(j).charAt(k) == 'k' || chessData.get(j).charAt(k) == 'K' || chessData.get(j).charAt(k) == 'q' || chessData.get(j).charAt(k) == 'n' || chessData.get(j).charAt(k) == 'N'
+                                || chessData.get(j).charAt(k) == 'Q' || chessData.get(j).charAt(k) == 'p' || chessData.get(j).charAt(k) == 'P' || chessData.get(j).charAt(k) == 'r' || chessData.get(j).charAt(k) == 'R' || chessData.get(j).charAt(k) == '_')) {
+                            JOptionPane.showMessageDialog(chessGameFrame, "102: Chess components error!");
+                            return false;
                         }
                     }
                 }
-                if (!(chessData.get(8 + i * 9).equals("w") || chessData.get(8 + i * 9).equals("b"))) {
-                    return false;
-                }
             }
-
-            //存储步骤
-            step.clear();  //清空
-            step2.clear();
-            for (int i = 0; i < chessData.size()/9 ; i++) {
-                ArrayList<String> temp = new ArrayList<>(9);
-                for (int j = i * 9; j < 8 + i * 9; j++) {
-                    temp.add(chessData.get(j));
-                }
-                temp.add(chessData.get(8 + i * 9));  //行棋方
-                step.add(temp);
-                step2.add(temp);
+            if (!(chessData.get(8 + i * 9).equals("w") || chessData.get(8 + i * 9).equals("b"))) {
+                JOptionPane.showMessageDialog(chessGameFrame, "103: No current player!");
+                return false;
             }
-
-            //初始化棋盘(从最后一步开始)
-            for (int i = chessData.size() - 9; i < chessData.size() - 1; i++) {
-                for (int j = 0; j < 8; j++) {
-                    int m = i + 9 - chessData.size();
-                    switch (chessData.get(i).charAt(j)) {
-                        case 'R' -> putChessOnBoard(new RookChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'R'));
-                        case 'N' -> putChessOnBoard(new KnightChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'N'));
-                        case 'B' -> putChessOnBoard(new BishopChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'B'));
-                        case 'Q' -> putChessOnBoard(new QueenChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'Q'));
-                        case 'K' -> putChessOnBoard(new KingChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'K'));
-                        case 'P' -> putChessOnBoard(new PawnChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'P'));
-                        case 'r' -> putChessOnBoard(new RookChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.WHITE, clickController, CHESS_SIZE, 'r'));
-                        case 'n' -> putChessOnBoard(new KnightChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.WHITE, clickController, CHESS_SIZE, 'n'));
-                        case 'b' -> putChessOnBoard(new BishopChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.WHITE, clickController, CHESS_SIZE, 'b'));
-                        case 'q' -> putChessOnBoard(new QueenChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.WHITE, clickController, CHESS_SIZE, 'q'));
-                        case 'k' -> putChessOnBoard(new KingChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.WHITE, clickController, CHESS_SIZE, 'k'));
-                        case 'p' -> putChessOnBoard(new PawnChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.WHITE, clickController, CHESS_SIZE, 'p'));
-                        case '_' -> putChessOnBoard(new EmptySlotComponent(new ChessboardPoint(m, j), calculatePoint(m, j), clickController, CHESS_SIZE, '_'));
-                    }
-                }
-            }
-            repaint();
-
-            if (chessData.get(chessData.size() - 1).equals("w")) {
-                currentColor = ChessColor.WHITE;
-                colorLabel.setText("WHITE");
-            } else {
-                currentColor = ChessColor.BLACK;
-                colorLabel.setText("BLACK");
-            }
-            return true;
         }
-        return false;
+
+        //存储步骤
+        step.clear();  //清空
+        step2.clear();
+        for (int i = 0; i < chessData.size()/9 ; i++) {
+            ArrayList<String> temp = new ArrayList<>(9);
+            for (int j = i * 9; j < 8 + i * 9; j++) {
+                temp.add(chessData.get(j));
+            }
+            temp.add(chessData.get(8 + i * 9));  //行棋方
+            step.add(temp);
+            step2.add(temp);
+        }
+
+        //初始化棋盘(从最后一步开始)
+        for (int i = chessData.size() - 9; i < chessData.size() - 1; i++) {
+            for (int j = 0; j < 8; j++) {
+                int m = i + 9 - chessData.size();
+                switch (chessData.get(i).charAt(j)) {
+                    case 'R' -> putChessOnBoard(new RookChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'R'));
+                    case 'N' -> putChessOnBoard(new KnightChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'N'));
+                    case 'B' -> putChessOnBoard(new BishopChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'B'));
+                    case 'Q' -> putChessOnBoard(new QueenChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'Q'));
+                    case 'K' -> putChessOnBoard(new KingChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'K'));
+                    case 'P' -> putChessOnBoard(new PawnChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.BLACK, clickController, CHESS_SIZE, 'P'));
+                    case 'r' -> putChessOnBoard(new RookChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.WHITE, clickController, CHESS_SIZE, 'r'));
+                    case 'n' -> putChessOnBoard(new KnightChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.WHITE, clickController, CHESS_SIZE, 'n'));
+                    case 'b' -> putChessOnBoard(new BishopChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.WHITE, clickController, CHESS_SIZE, 'b'));
+                    case 'q' -> putChessOnBoard(new QueenChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.WHITE, clickController, CHESS_SIZE, 'q'));
+                    case 'k' -> putChessOnBoard(new KingChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.WHITE, clickController, CHESS_SIZE, 'k'));
+                    case 'p' -> putChessOnBoard(new PawnChessComponent(new ChessboardPoint(m, j), calculatePoint(m, j), ChessColor.WHITE, clickController, CHESS_SIZE, 'p'));
+                    case '_' -> putChessOnBoard(new EmptySlotComponent(new ChessboardPoint(m, j), calculatePoint(m, j), clickController, CHESS_SIZE, '_'));
+                }
+            }
+        }
+        repaint();
+
+        if (chessData.get(chessData.size() - 1).equals("w")) {
+            currentColor = ChessColor.WHITE;
+            colorLabel.setText("WHITE");
+        } else {
+            currentColor = ChessColor.BLACK;
+            colorLabel.setText("BLACK");
+        }
+        return true;
     }
 
     //存下棋步骤(整个棋盘)

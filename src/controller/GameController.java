@@ -26,15 +26,16 @@ public class GameController {
                 return chessData;
             } else {
                 System.out.println("Load game failed!");
-                JOptionPane.showMessageDialog(Chessboard.chessGameFrame, "Load game failed!");
+//                JOptionPane.showMessageDialog(Chessboard.chessGameFrame, "Load game failed!");
                 return null;
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(Chessboard.chessGameFrame, "Load game failed!");
+            System.out.println("Load game failed!");
+//            JOptionPane.showMessageDialog(Chessboard.chessGameFrame, "Load game failed!");
 //            e.printStackTrace();
         }
         System.out.println("Load game failed!");
-        JOptionPane.showMessageDialog(Chessboard.chessGameFrame, "Load game failed!");
+//        JOptionPane.showMessageDialog(Chessboard.chessGameFrame, "Load game failed!");
         return null;
     }
 
