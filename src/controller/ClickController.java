@@ -122,7 +122,7 @@ public class ClickController {
 
 
     //判断是否被将军（未被将军返回null）
-    public ChessColor check() {
+    public static ChessColor check() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 ChessComponent king = ChessComponent.chessComponents[i][j]; //遍历棋盘，找到王
@@ -370,30 +370,91 @@ public class ClickController {
                 for (int i = Math.min(chess1.getChessboardPoint().getY(), chess2.getChessboardPoint().getY()) + 1;
                      i < Math.max(chess1.getChessboardPoint().getY(), chess2.getChessboardPoint().getY()); i++) {
                     //X对应row,Y对应col,遍历两个棋子间的元素，判断是否都为空棋子
-                    if (!(chessComponents[chess1.getChessboardPoint().getX()][i] instanceof EmptySlotComponent)) {
+                    if (!(chessComponents[chess1.getChessboardPoint().getX()][i] instanceof EmptySlotComponent) || check() != ChessColor.NONE) {
                         return false;
                     }
                 }
+                for (int i = Math.min(chess1.getChessboardPoint().getY(), chess2.getChessboardPoint().getY() + 1);
+                     i <= Math.max(chess1.getChessboardPoint().getY(), chess2.getChessboardPoint().getY()); i++) {
+                    //王经过或者到达的位置不能受其他棋子攻击
+                    ChessComponent sChessComponent = ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i];
+                    ChessboardPoint sPoint = ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i].getChessboardPoint();
+                    Point sLocation = ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i].getLocation();
+
+                    chessboard.remove(ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()]);
+                    chessboard.remove(ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i]);
+                    ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i] = new KingChessComponent(sPoint, sLocation, chess2.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE(), chess2.getChessName());
+                    ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()] = new EmptySlotComponent(chess2.getChessboardPoint(), chess2.getLocation(), chessboard.getClickController(), chessboard.getCHESS_SIZE(), '_');
+                    chessboard.add(ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i]);
+                    chessboard.add(ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()]);
+                    if (check() != ChessColor.NONE){
+                        chessboard.remove(ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i]);
+                        chessboard.remove(ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()]);
+                        ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()] = chess2;
+                        ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i] = sChessComponent;
+                        chessboard.add(chess2);
+                        chessboard.add(sChessComponent);
+                        chessboard.repaint();
+                        return false;
+                    }else {
+                        chessboard.remove(ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i]);
+                        chessboard.remove(ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()]);
+                        ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][chess2.getChessboardPoint().getY()] = chess2;
+                        ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i] = sChessComponent;
+                        chessboard.add(chess2);
+                        chessboard.add(sChessComponent);
+                    }
+                }
+                chessboard.repaint();
                 return true;
             }
         } else {
             if (((RookChessComponent) chess2).isRookCanCastle() && ((KingChessComponent) chess1).isKingCanCastle()) {
                 for (int i = Math.min(chess1.getChessboardPoint().getY(), chess2.getChessboardPoint().getY()) + 1;
                      i < Math.max(chess1.getChessboardPoint().getY(), chess2.getChessboardPoint().getY()); i++) {//小心不要直接chess1.getX(),那个坐标是图形界面的坐标
-                    if (!(chessComponents[chess1.getChessboardPoint().getX()][i] instanceof EmptySlotComponent)) {
+                    if (!(chessComponents[chess1.getChessboardPoint().getX()][i] instanceof EmptySlotComponent) || check() != ChessColor.NONE) {
                         return false;
                     }
                 }
+                for (int i = Math.min(chess1.getChessboardPoint().getY(), chess2.getChessboardPoint().getY()) + 1;
+                     i <= Math.max(chess1.getChessboardPoint().getY(), chess2.getChessboardPoint().getY()); i++) {//小心不要直接chess1.getX(),那个坐标是图形界面的坐标
+                    //王经过或者到达的位置不能受其他棋子攻击
+                    ChessComponent sChessComponent = ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i];
+                    ChessboardPoint sPoint = ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i].getChessboardPoint();
+                    Point sLocation = ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i].getLocation();
+
+                    chessboard.remove(ChessComponent.chessComponents[chess1.getChessboardPoint().getX()][chess1.getChessboardPoint().getY()]);
+                    chessboard.remove(ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i]);
+                    ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i] = new KingChessComponent(sPoint, sLocation, chess2.getChessColor(), chessboard.getClickController(), chessboard.getCHESS_SIZE(), chess2.getChessName());
+                    ChessComponent.chessComponents[chess1.getChessboardPoint().getX()][chess1.getChessboardPoint().getY()] = new EmptySlotComponent(chess2.getChessboardPoint(), chess2.getLocation(), chessboard.getClickController(), chessboard.getCHESS_SIZE(), '_');
+                    chessboard.add(ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i]);
+                    chessboard.add(ChessComponent.chessComponents[chess1.getChessboardPoint().getX()][chess1.getChessboardPoint().getY()]);
+                    if (check() != ChessColor.NONE){
+                        chessboard.remove(ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i]);
+                        chessboard.remove(ChessComponent.chessComponents[chess1.getChessboardPoint().getX()][chess1.getChessboardPoint().getY()]);
+                        ChessComponent.chessComponents[chess1.getChessboardPoint().getX()][chess1.getChessboardPoint().getY()] = chess1;
+                        ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i] = sChessComponent;
+                        chessboard.add(chess1);
+                        chessboard.add(sChessComponent);
+                        chessboard.repaint();
+                        return false;
+                    }else {
+                        chessboard.remove(ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i]);
+                        chessboard.remove(ChessComponent.chessComponents[chess1.getChessboardPoint().getX()][chess1.getChessboardPoint().getY()]);
+                        ChessComponent.chessComponents[chess1.getChessboardPoint().getX()][chess1.getChessboardPoint().getY()] = chess1;
+                        ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i] = sChessComponent;
+                        chessboard.add(chess1);
+                        chessboard.add(sChessComponent);
+                    }
+                }
+                chessboard.repaint();
                 return true;
             }
         }
+        chessboard.repaint();
         return false;//当发现rook和king因为移动过而不能易位时，会执行这句话
     }
 
-    //FIXME:以下方法用于检查王车易位条件2和3，这个判断暂未加入到代码中
-    public boolean WithoutCheckmate() {
-        return true;
-    }
 
     //用于检测合法落子点的方法
     public void checkValidMovements(ChessComponent chessComponent) {
