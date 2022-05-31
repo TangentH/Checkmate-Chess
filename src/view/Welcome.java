@@ -78,7 +78,10 @@ public class Welcome extends JFrame {
         AboutUsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                JOptionPane.showMessageDialog(Main.welcomeFrame, "This project is produced by: \nWEN Pengfei(温鹏飞)and HUANG Tingjun(黄亭钧)\n" +
+                        "from SUSTech(南方科技大学).\n" +
+                        "This Chess Game is our final project for the course \"CS102A\".\n" +
+                        "Finished time: 2022/5/31");
             }
         });
 
