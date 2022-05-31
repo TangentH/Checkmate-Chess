@@ -130,6 +130,7 @@ public class ChessGameFrame extends JFrame {
 //        add(button);
 //    }
     private void addLoadButton() {
+        JFileChooser chooser = new JFileChooser("./resource");
         JButton button = new JButton("Load");   //TODO
         button.setLocation(750, 530);
         button.setSize(120, 50);
@@ -137,10 +138,19 @@ public class ChessGameFrame extends JFrame {
         add(button);
         button.setBackground(new Color(149, 195, 230, 255));
 
-        button.addActionListener(e -> { //TODO：了解actionListener如何使用
+        button.addActionListener(e -> {
             System.out.println("Click load");
-            String path = JOptionPane.showInputDialog(this, "Input Path here");
-            gameController.loadGameFromFile(path);
+            int s = chooser.showOpenDialog(this);
+            if (s == JFileChooser.APPROVE_OPTION){
+                File file = chooser.getSelectedFile();
+                if (file.getName().endsWith(".txt")){
+                    gameController.loadGameFromFile(file.getAbsolutePath());
+                }else {
+                    System.out.println("Load game failed!"); //TODO:文件格式错误，弹窗提示
+                    JOptionPane.showMessageDialog(Chessboard.chessGameFrame, "Invalid file format!");
+                }
+            }
+
         });
     }
 
@@ -254,9 +264,8 @@ public class ChessGameFrame extends JFrame {
 
             if (chessboard.step2.size() > 1) {
                 chessboard.step2.remove(chessboard.step2.size() - 1);
-                chessboard.loadGame2(chessboard.step.get(chessboard.step2.size() - 1));
-                swapColorLabel();
-                ClickController.checkmate();
+                chessboard.loadGame2(chessboard.step2.get(chessboard.step2.size() - 1));
+                ClickController.check();
             }
 
 
@@ -278,7 +287,6 @@ public class ChessGameFrame extends JFrame {
             if (chessboard.step2.size() < chessboard.step.size()) {
                 chessboard.step2.add(chessboard.step.get(chessboard.step2.size()));
                 chessboard.loadGame2(chessboard.step.get(chessboard.step2.size() - 1));
-                swapColorLabel();
             }
 
 

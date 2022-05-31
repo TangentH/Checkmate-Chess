@@ -45,7 +45,7 @@ public class Chessboard extends JComponent {
     private final int CHESS_SIZE;
     private JLabel colorLabel;//用于显示当前行棋方的label
     public static ChessGameFrame chessGameFrame;
-    public ArrayList<ArrayList<String>> step = new ArrayList<>();
+    public ArrayList<ArrayList<String>>  step= new ArrayList<>();
     public ArrayList<ArrayList<String>> step2 = new ArrayList<>();
     private static boolean soundEffectOn = true;//控制音效开关的参数
 
@@ -395,8 +395,10 @@ public class Chessboard extends JComponent {
 
             if (chessData.get(chessData.size() - 1).equals("w")) {
                 currentColor = ChessColor.WHITE;
+                colorLabel.setText("WHITE");
             } else {
                 currentColor = ChessColor.BLACK;
+                colorLabel.setText("BLACK");
             }
             return true;
         }
@@ -487,8 +489,10 @@ public class Chessboard extends JComponent {
 
             if (chessData.get(8).equals("w")) {
                 currentColor = ChessColor.WHITE;
+                colorLabel.setText("WHITE");
             } else {
                 currentColor = ChessColor.BLACK;
+                colorLabel.setText("BLACK");
             }
         }
     }
