@@ -390,7 +390,7 @@ public class ClickController {
                     }
                 }
                 for (int i = Math.min(chess1.getChessboardPoint().getY(), chess2.getChessboardPoint().getY() + 1);
-                     i <= Math.max(chess1.getChessboardPoint().getY(), chess2.getChessboardPoint().getY()); i++) {
+                     i < Math.max(chess1.getChessboardPoint().getY(), chess2.getChessboardPoint().getY()); i++) {
                     //王经过或者到达的位置不能受其他棋子攻击
                     ChessComponent sChessComponent = ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i];
                     ChessboardPoint sPoint = ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i].getChessboardPoint();
@@ -432,7 +432,7 @@ public class ClickController {
                     }
                 }
                 for (int i = Math.min(chess1.getChessboardPoint().getY(), chess2.getChessboardPoint().getY()) + 1;
-                     i <= Math.max(chess1.getChessboardPoint().getY(), chess2.getChessboardPoint().getY()); i++) {//小心不要直接chess1.getX(),那个坐标是图形界面的坐标
+                     i < Math.max(chess1.getChessboardPoint().getY(), chess2.getChessboardPoint().getY()); i++) {//小心不要直接chess1.getX(),那个坐标是图形界面的坐标
                     //王经过或者到达的位置不能受其他棋子攻击
                     ChessComponent sChessComponent = ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i];
                     ChessboardPoint sPoint = ChessComponent.chessComponents[chess2.getChessboardPoint().getX()][i].getChessboardPoint();
